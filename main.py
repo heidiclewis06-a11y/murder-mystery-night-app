@@ -134,3 +134,4 @@ Rules:
 
             st.session_state.host_messages.append({"role": "host", "content": ai_reply})
             st.rerun()
+ 
