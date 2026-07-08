@@ -7,9 +7,9 @@ from datetime import datetime
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Host unforgettable murder mystery parties")
+st.subheader("AI-Powered Murder Mystery Host")
 
-# Load stories
+# Load stories (same as before)
 @st.cache_data
 def load_all_stories():
     stories = {}
@@ -27,134 +27,74 @@ def load_all_stories():
 
 stories = load_all_stories()
 
-if not stories:
-    st.error("No stories found! Make sure you have a 'stories' folder with JSON files.")
-    st.stop()
+# Story selection and game creation (same as before - abbreviated)
+if stories:
+    story_options = {story["title"]: story_id for story_id, story in stories.items()}
+    selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()))
 
-# Story Selection
-story_options = {story["title"]: story_id for story_id, story in stories.items()}
-selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()))
-
-if selected_title:
-    story_id = story_options[selected_title]
-    story = stories[story_id]
-    
-    col1, col2 = st.columns([3, 2])
-    
-    with col1:
-        st.subheader(story["title"])
-        st.write(story["description"])
+    if selected_title:
+        story_id = story_options[selected_title]
+        story = stories[story_id]
         
-        num_guests = st.number_input("Number of Guests", 
-                                   min_value=story["generation_rules"]["min_players"],
-                                   max_value=story["generation_rules"]["max_players"], 
-                                   value=8)
+        num_guests = st.number_input("Number of Guests", min_value=6, max_value=12, value=8)
         
-        if st.button("🎲 Generate Game", type="primary", use_container_width=True):
+        if st.button("🎲 Generate Game", type="primary"):
             murderer_role = random.choice(story.get("possible_murderers", []))
-            
-            game_session = {
+            st.session_state.current_game = {
                 "game_id": datetime.now().strftime("%Y%m%d_%H%M%S"),
                 "story_id": story_id,
                 "num_guests": num_guests,
-                "murderer_role": murderer_role,
-                "created_at": datetime.now().isoformat()
+                "murderer_role": murderer_role
             }
-            
-            st.session_state.current_game = game_session
-            st.success("✅ Game Created! The murderer has been secretly chosen.")
-            st.balloons()
+            st.success("Game Created!")
 
-    with col2:
-        st.subheader("Game Info")
-        st.write(f"**Duration:** ~{story['duration_minutes']} minutes")
-        st.write(f"**Theme:** {story['theme']}")
-
-# ====================== HOST MODE ======================
+# ==================== HOST MODE ====================
 if "current_game" in st.session_state:
-    st.divider()
-    st.success("Game is Ready!")
-    
-    if st.button("🎤 Open Host Control Panel", type="primary", use_container_width=True):
+    if st.button("🎤 Launch AI Host Mode", type="primary", use_container_width=True):
         st.session_state.host_mode = True
         st.rerun()
 
-if st.session_state.get("host_mode", False) and "current_game" in st.session_state:
+if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
     story = stories[game["story_id"]]
     
-    st.divider()
-    st.title(f"🎤 Host Control - {story['title']}")
+    st.title(f"🎤 AI Host - {story['title']}")
+    st.caption("The AI Host will speak narration and answer questions")
+
+    # Simple AI Host Chat
+    if "host_messages" not in st.session_state:
+        st.session_state.host_messages = []
+
+    # Display previous messages
+    for msg in st.session_state.host_messages:
+        if msg["role"] == "host":
+            st.markdown(f"**Host:** {msg['content']}")
+        else:
+            st.markdown(f"**Player:** {msg['content']}")
+
+    # Player question input
+    player_question = st.text_input("Type a player question (or what the Host should say next):")
     
-    if "current_act" not in st.session_state:
-        st.session_state.current_act = 0
-    
-    acts = ["Introduction", "Act 1", "Act 2", "Act 3", "Accusations", "Reveal & Twist"]
-    current = st.session_state.current_act
-    
-    st.progress(current / (len(acts) - 1))
-    st.subheader(f"Phase {current + 1}/6: {acts[current]}")
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("← Previous", key="prev_phase", use_container_width=True):
-            if current > 0:
-                st.session_state.current_act -= 1
-                st.rerun()
-    with col2:
-        if st.button("Next Phase →", type="primary", key="next_phase", use_container_width=True):
-            if current < len(acts)-1:
-                st.session_state.current_act += 1
-                st.rerun()
-    with col3:
-        if st.button("Exit Host Mode", key="exit_host", use_container_width=True):
-            st.session_state.host_mode = False
+    if st.button("Send to AI Host"):
+        if player_question:
+            st.session_state.host_messages.append({"role": "player", "content": player_question})
+            
+            # Call AI (using Grok/Claude/ChatGPT style prompt)
+            prompt = f"""
+You are an immersive AI Host for the murder mystery '{story['title']}'.
+Stay completely in character. Speak naturally and dramatically.
+Current story knowledge: {story['core_plot']}
+Clues so far: {[clue['clue_text'] for clue in story['clues']]}
+Twist: {story['twist_ending']}
+
+Player asked: {player_question}
+
+Respond in character as the host:
+"""
+            # For now, we'll simulate. Later we'll connect real LLM
+            response = "Interesting question... Let me think about that."  # Placeholder
+            
+            st.session_state.host_messages.append({"role": "host", "content": response})
             st.rerun()
 
-    st.divider()
-
-    # PHASE CONTENT
-    if current == 0:        # Introduction
-        st.subheader("Opening Narration")
-        st.write(story["description"])
-        st.write(story["core_plot"])
-        st.info("**Host says:** Welcome everyone! Stay in character, enjoy dinner, and begin questioning after each clue.")
-
-    elif current == 1:      # Act 1
-        st.subheader("Act 1 - First Clue")
-        clue = story["clues"][0]
-        st.write(f"**Clue:** {clue['clue_text']}")
-        st.caption(clue.get("importance", ""))
-        st.info("**Host says:** You now have 10-12 minutes to question each other. Go!")
-
-    elif current == 2:      # Act 2
-        st.subheader("Act 2 - Second Clue")
-        clue = story["clues"][1]
-        st.write(f"**Clue:** {clue['clue_text']}")
-        st.caption(clue.get("importance", ""))
-
-    elif current == 3:      # Act 3
-        st.subheader("Act 3 - Final Clue")
-        clue = story["clues"][2]
-        st.write(f"**Clue:** {clue['clue_text']}")
-        st.caption(clue.get("importance", ""))
-
-    elif current == 4:      # Accusations
-        st.subheader("Accusation Phase")
-        st.write(story["accusation_phase"])
-        st.info("Go around the table. Have each player state their character and accusation.")
-
-    elif current == 5:      # Reveal
-        st.subheader("🎭 THE REVEAL")
-        murderer_role = game["murderer_role"]
-        murderer_name = next((r["default_name"] for r in story["roles"] if r["role_id"] == murderer_role), murderer_role.title())
-        
-        st.error(f"**THE MURDERER WAS: {murderer_name}**")
-        st.write(story["reveal_phase"])
-        
-        if st.button("Show Final Twist", key="show_twist"):
-            st.success("**Final Twist:** " + story["twist_ending"])
-
-    st.caption("Use the buttons above to move between phases")
-
-st.caption("Mystery Night AI — Summer Project")
+    st.info("In the final version, this will use voice + avatar (HeyGen, D-ID, or ElevenLabs + Streamlit).")
