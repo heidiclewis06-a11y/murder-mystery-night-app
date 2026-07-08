@@ -28,7 +28,7 @@ def load_all_stories():
 stories = load_all_stories()
 
 if not stories:
-    st.error("No stories found in the 'stories' folder!")
+    st.error("No stories found! Make sure you have a 'stories' folder with JSON files.")
     st.stop()
 
 # Story Selection
@@ -45,7 +45,10 @@ if selected_title:
         st.subheader(story["title"])
         st.write(story["description"])
         
-        num_guests = st.number_input("Number of Guests", min_value=6, max_value=12, value=8)
+        num_guests = st.number_input("Number of Guests", 
+                                   min_value=story["generation_rules"]["min_players"],
+                                   max_value=story["generation_rules"]["max_players"], 
+                                   value=8)
         
         if st.button("🎲 Generate Game", type="primary", use_container_width=True):
             murderer_role = random.choice(story.get("possible_murderers", []))
@@ -59,7 +62,7 @@ if selected_title:
             }
             
             st.session_state.current_game = game_session
-            st.success("✅ Game Created!")
+            st.success("✅ Game Created! The murderer has been secretly chosen.")
             st.balloons()
 
     with col2:
@@ -67,7 +70,7 @@ if selected_title:
         st.write(f"**Duration:** ~{story['duration_minutes']} minutes")
         st.write(f"**Theme:** {story['theme']}")
 
-# === IMPROVED HOST MODE ===
+# ====================== HOST MODE ======================
 if "current_game" in st.session_state:
     st.divider()
     st.success("Game is Ready!")
@@ -76,7 +79,6 @@ if "current_game" in st.session_state:
         st.session_state.host_mode = True
         st.rerun()
 
-# Show Host Panel
 if st.session_state.get("host_mode", False) and "current_game" in st.session_state:
     game = st.session_state.current_game
     story = stories[game["story_id"]]
@@ -84,7 +86,6 @@ if st.session_state.get("host_mode", False) and "current_game" in st.session_sta
     st.divider()
     st.title(f"🎤 Host Control - {story['title']}")
     
-    # Progress
     if "current_act" not in st.session_state:
         st.session_state.current_act = 0
     
@@ -96,17 +97,17 @@ if st.session_state.get("host_mode", False) and "current_game" in st.session_sta
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        if st.button("← Previous", use_container_width=True):
+        if st.button("← Previous", key="prev_phase", use_container_width=True):
             if current > 0:
                 st.session_state.current_act -= 1
                 st.rerun()
     with col2:
-        if st.button("Next Phase →", type="primary", use_container_width=True):
+        if st.button("Next Phase →", type="primary", key="next_phase", use_container_width=True):
             if current < len(acts)-1:
                 st.session_state.current_act += 1
                 st.rerun()
     with col3:
-        if st.button("Exit Host Mode"):
+        if st.button("Exit Host Mode", key="exit_host", use_container_width=True):
             st.session_state.host_mode = False
             st.rerun()
 
@@ -151,39 +152,9 @@ if st.session_state.get("host_mode", False) and "current_game" in st.session_sta
         st.error(f"**THE MURDERER WAS: {murderer_name}**")
         st.write(story["reveal_phase"])
         
-        if st.button("Show Final Twist"):
+        if st.button("Show Final Twist", key="show_twist"):
             st.success("**Final Twist:** " + story["twist_ending"])
 
     st.caption("Use the buttons above to move between phases")
-    game = st.session_state.current_game
-    story = stories[game["story_id"]]
-    
-    # Progress
-    if "current_act" not in st.session_state:
-        st.session_state.current_act = 0
-        
-    acts = ["Introduction", "Act 1", "Act 2", "Act 3", "Accusations", "Reveal"]
-    current = st.session_state.current_act
-    
-    st.subheader(f"Phase: {acts[current]}")
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        if st.button("← Previous Phase"):
-            if current > 0:
-                st.session_state.current_act -= 1
-                st.rerun()
-    with col2:
-        if st.button("Next Phase →", type="primary"):
-            if current < len(acts)-1:
-                st.session_state.current_act += 1
-                st.rerun()
-    with col3:
-        if st.button("Exit Host Mode"):
-            st.session_state.host_mode = False
-            st.rerun()
 
-    # Show content based on phase (same as before)
-    # ... (I can expand this part if needed)
-
-st.caption("Mystery Night AI")
+st.caption("Mystery Night AI — Summer Project")
