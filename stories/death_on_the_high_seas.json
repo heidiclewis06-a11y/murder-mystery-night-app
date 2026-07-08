@@ -1,0 +1,49 @@
+{
+  "story_id": "death_on_the_high_seas",
+  "title": "Death on the Azure Empress",
+  "theme": "Luxury Cruise Ship",
+  "duration_minutes": 90,
+  "description": "A glamorous week-long voyage on the luxury cruise ship Azure Empress turns deadly on the final night. Amidst ocean breezes, fine dining, and starlit decks, dark secrets, affairs, and corporate greed surface in this high-seas thriller.",
+  "core_plot": "During the Captain’s Gala dinner, billionaire Victor Lang is poisoned and pushed overboard. A valuable encrypted USB drive containing sensitive corporate data disappears.",
+  "victim": "Victor Lang",
+  "motive_summary": "Corporate espionage, inheritance disputes, and romantic affairs.",
+  "twist_ending": "The USB drive did not contain financial secrets — it held proof that Victor planned to donate most of his fortune to ocean conservation.",
+  "possible_murderers": ["captain", "heiress", "business_partner", "influencer", "head_chef", "bartender"],
+  "confessions": {
+    "captain": {"guilty": "Victor was going to expose my financial troubles with the cruise line.", "innocent": "I was on the bridge during the time of the incident."},
+    "heiress": {"guilty": "My father was cutting me out of the will. I couldn’t let that happen.", "innocent": "I was devastated by my father’s death."},
+    "business_partner": {"guilty": "Victor was about to ruin our company with his new plans.", "innocent": "We had disagreements, but I respected him."},
+    "influencer": {"guilty": "Victor threatened to destroy my career after I recorded him.", "innocent": "I was just filming content for my followers."},
+    "head_chef": {"guilty": "Victor publicly humiliated me in front of the entire gala.", "innocent": "I was busy in the kitchen all night."},
+    "bartender": {"guilty": "Victor knew about my past mistakes and was going to expose me.", "innocent": "I just serve drinks and keep my head down."}
+  },
+  "clues": [
+    {"act": 1, "clue_text": "A broken luxury watch strap engraved with initials and traces of a rare sleeping drug on the deck railing.", "importance": "Indicates the victim was drugged."},
+    {"act": 2, "clue_text": "A deleted cabin key card log showing unauthorized entry into the victim’s suite at 11:45 PM.", "importance": "Reveals private access."},
+    {"act": 3, "clue_text": "A monogrammed cufflink found near the railing belonging to only one passenger.", "importance": "Directly ties someone close to the victim."}
+  ],
+  "accusation_phase": "It’s time for accusations! We’ll go around one by one. State your character name clearly and tell us who you believe is the murderer and why.",
+  "reveal_phase": "The murderer was… [Murderer Name]! Will the accused please stand and read your full confession to the group?",
+  "roles": [
+    {"role_id": "captain", "default_name": "Captain Elena Voss"},
+    {"role_id": "heiress", "default_name": "Sophia Lang"},
+    {"role_id": "business_partner", "default_name": "Marcus Hale"},
+    {"role_id": "influencer", "default_name": "Kai Rivera"},
+    {"role_id": "head_chef", "default_name": "Chef Marco Rossi"},
+    {"role_id": "bartender", "default_name": "Riley Quinn"}
+  ],
+  "supporting_roles": [
+    {"role_id": "security", "default_name": "Security Chief Daniels"},
+    {"role_id": "entertainer", "default_name": "Jazz Singer Lena Rose"},
+    {"role_id": "doctor", "default_name": "Ship Doctor Patel"},
+    {"role_id": "wealthy_passenger", "default_name": "Mrs. Eleanor Grant"},
+    {"role_id": "personal_assistant", "default_name": "Alex Rivera"}
+  ],
+  "generation_rules": {
+    "min_players": 6,
+    "max_players": 12,
+    "core_roles_required": ["captain", "heiress", "business_partner", "influencer", "head_chef", "bartender"],
+    "gender_flexible": true,
+    "name_style": "Modern luxury names"
+  }
+}
