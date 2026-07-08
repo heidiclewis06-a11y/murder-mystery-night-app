@@ -67,7 +67,7 @@ if selected_title:
         st.write(f"**Duration:** ~{story['duration_minutes']} minutes")
         st.write(f"**Theme:** {story['theme']}")
 
-# === HOST MODE BUTTON (Fixed) ===
+# === IMPROVED HOST MODE ===
 if "current_game" in st.session_state:
     st.divider()
     st.success("Game is Ready!")
@@ -76,10 +76,85 @@ if "current_game" in st.session_state:
         st.session_state.host_mode = True
         st.rerun()
 
-# Show Host Panel in the same app (simpler method)
+# Show Host Panel
 if st.session_state.get("host_mode", False) and "current_game" in st.session_state:
+    game = st.session_state.current_game
+    story = stories[game["story_id"]]
+    
     st.divider()
-    st.title("🎤 Host Control Panel")
+    st.title(f"🎤 Host Control - {story['title']}")
+    
+    # Progress
+    if "current_act" not in st.session_state:
+        st.session_state.current_act = 0
+    
+    acts = ["Introduction", "Act 1", "Act 2", "Act 3", "Accusations", "Reveal & Twist"]
+    current = st.session_state.current_act
+    
+    st.progress(current / (len(acts) - 1))
+    st.subheader(f"Phase {current + 1}/6: {acts[current]}")
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("← Previous", use_container_width=True):
+            if current > 0:
+                st.session_state.current_act -= 1
+                st.rerun()
+    with col2:
+        if st.button("Next Phase →", type="primary", use_container_width=True):
+            if current < len(acts)-1:
+                st.session_state.current_act += 1
+                st.rerun()
+    with col3:
+        if st.button("Exit Host Mode"):
+            st.session_state.host_mode = False
+            st.rerun()
+
+    st.divider()
+
+    # PHASE CONTENT
+    if current == 0:        # Introduction
+        st.subheader("Opening Narration")
+        st.write(story["description"])
+        st.write(story["core_plot"])
+        st.info("**Host says:** Welcome everyone! Stay in character, enjoy dinner, and begin questioning after each clue.")
+
+    elif current == 1:      # Act 1
+        st.subheader("Act 1 - First Clue")
+        clue = story["clues"][0]
+        st.write(f"**Clue:** {clue['clue_text']}")
+        st.caption(clue.get("importance", ""))
+        st.info("**Host says:** You now have 10-12 minutes to question each other. Go!")
+
+    elif current == 2:      # Act 2
+        st.subheader("Act 2 - Second Clue")
+        clue = story["clues"][1]
+        st.write(f"**Clue:** {clue['clue_text']}")
+        st.caption(clue.get("importance", ""))
+
+    elif current == 3:      # Act 3
+        st.subheader("Act 3 - Final Clue")
+        clue = story["clues"][2]
+        st.write(f"**Clue:** {clue['clue_text']}")
+        st.caption(clue.get("importance", ""))
+
+    elif current == 4:      # Accusations
+        st.subheader("Accusation Phase")
+        st.write(story["accusation_phase"])
+        st.info("Go around the table. Have each player state their character and accusation.")
+
+    elif current == 5:      # Reveal
+        st.subheader("🎭 THE REVEAL")
+        murderer_role = game["murderer_role"]
+        murderer_name = next((r["default_name"] for r in story["roles"] if r["role_id"] == murderer_role), murderer_role.title())
+        
+        st.error(f"**THE MURDERER WAS: {murderer_name}**")
+        st.write(story["reveal_phase"])
+        
+        if st.button("Show Final Twist"):
+            st.success("**Final Twist:** " + story["twist_ending"])
+
+    st.caption("Use the buttons above to move between phases")
     game = st.session_state.current_game
     story = stories[game["story_id"]]
     
