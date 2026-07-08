@@ -1,0 +1,66 @@
+{
+  "story_id": "whispers_in_the_smoke",
+  "title": "Whispers in the Smoke",
+  "theme": "1920s Speakeasy",
+  "duration_minutes": 90,
+  "description": "Step into the glittering 1920s at an exclusive speakeasy where jazz fills the air and danger lurks behind every velvet curtain. When the club owner is murdered during a lavish party, secrets, bootlegging, and forbidden romances explode in this night of glamour and deception.",
+  "core_plot": "During a high-stakes poker game in the back room, speakeasy owner Vincent 'Vinny' Russo is shot. A valuable shipment of illegal whiskey and cash disappears.",
+  "victim": "Vincent 'Vinny' Russo",
+  "motive_summary": "Control of the speakeasy, romantic betrayal, and bootlegging rivalries.",
+  "twist_ending": "The missing whiskey shipment was poisoned. Vinny was about to expose a rival gang’s deadly plan, saving many lives.",
+  "possible_murderers": ["owner", "singer", "bootlegger", "socialite", "detective", "bartender"],
+  "confessions": {
+    "owner": {
+      "guilty": "One of them was trying to take over my club. I had to protect what was mine.",
+      "innocent": "I was hosting guests in the main room most of the night."
+    },
+    "singer": {
+      "guilty": "Vinny was going to expose my past and ruin my career in this town.",
+      "innocent": "I was performing on stage for most of the evening."
+    },
+    "bootlegger": {
+      "guilty": "Vinny owed me a large sum and refused to pay what he owed.",
+      "innocent": "I was delivering a shipment outside during the time of the murder."
+    },
+    "socialite": {
+      "guilty": "Vinny knew about my gambling debts and threatened to expose me.",
+      "innocent": "I was dancing and socializing in the main room all night."
+    },
+    "detective": {
+      "guilty": "Vinny had evidence that could ruin my career and send me to prison.",
+      "innocent": "I was there undercover investigating the club."
+    },
+    "bartender": {
+      "guilty": "Vinny found out I was working for a rival gang.",
+      "innocent": "I was busy serving drinks behind the bar the entire night."
+    }
+  },
+  "clues": [
+    {"act": 1, "clue_text": "A monogrammed silver flask with strong sedative residue and fresh fingerprints.", "importance": "Shows the victim was drugged before being shot."},
+    {"act": 2, "clue_text": "A torn gambling IOU for a huge sum with the initials 'J'.", "importance": "Reveals debt and blackmail."},
+    {"act": 3, "clue_text": "A broken pearl necklace strand and gunpowder residue on a discarded white glove.", "importance": "Points to someone wearing formal evening wear."}
+  ],
+  "accusation_phase": "It’s time for accusations! We’ll go around one by one. State your character name clearly and tell us who you believe is the murderer and why.",
+  "reveal_phase": "The murderer was… [Murderer Name]! Will the accused please stand and read your full confession to the group?",
+  "roles": [
+    {"role_id": "owner", "default_name": "Vincent 'Vinny' Russo"},
+    {"role_id": "singer", "default_name": "Jasmine 'Jazz' Malone"},
+    {"role_id": "bootlegger", "default_name": "Jack 'The Fixer' Harlan"},
+    {"role_id": "socialite", "default_name": "Lila Vanderbilt"},
+    {"role_id": "detective", "default_name": "Detective Ray Callahan"},
+    {"role_id": "bartender", "default_name": "Riley 'Reds' Quinn"}
+  ],
+  "supporting_roles": [
+    {"role_id": "gangster", "default_name": "Tommy 'Knuckles' Moretti"},
+    {"role_id": "flapper", "default_name": "Daisy Rose"},
+    {"role_id": "pianist", "default_name": "Louis 'Keys' Beaumont"},
+    {"role_id": "waiter", "default_name": "Eddie Malone"}
+  ],
+  "generation_rules": {
+    "min_players": 6,
+    "max_players": 12,
+    "core_roles_required": ["owner", "singer", "bootlegger", "socialite", "detective", "bartender"],
+    "gender_flexible": true,
+    "name_style": "1920s glamorous names"
+  }
+}
