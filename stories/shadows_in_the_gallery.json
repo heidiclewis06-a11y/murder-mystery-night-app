@@ -1,0 +1,66 @@
+{
+  "story_id": "shadows_in_the_gallery",
+  "title": "Shadows in the Gallery",
+  "theme": "Santa Fe Art Museum",
+  "duration_minutes": 90,
+  "description": "A star-studded private gala at a world-famous Santa Fe art museum ends in tragedy when a renowned collector is murdered. Amid priceless paintings and desert nights, jealousy, forgery, and hidden affairs come to light in this elegant and deadly mystery.",
+  "core_plot": "During the high-society gala, famous art collector Eleanor Voss is found stabbed in a restricted gallery. A valuable painting is missing.",
+  "victim": "Eleanor Voss",
+  "motive_summary": "Art forgery, romantic betrayal, and financial desperation drive the crime.",
+  "twist_ending": "The stolen painting was a fake all along. Eleanor was about to expose a major forgery ring — the real masterpiece was safely hidden elsewhere.",
+  "possible_murderers": ["curator", "artist", "collector", "gallerist", "critic", "intern"],
+  "confessions": {
+    "curator": {
+      "guilty": "Eleanor discovered I had been involved in selling forged artworks. I couldn’t let my career be destroyed.",
+      "innocent": "I was giving a private tour to donors during the time of the incident."
+    },
+    "artist": {
+      "guilty": "Eleanor was going to expose that I had been forging paintings. My entire career was at stake.",
+      "innocent": "I was showcasing my latest work in the main gallery all evening."
+    },
+    "collector": {
+      "guilty": "Eleanor refused to sell me the painting I desperately needed for my collection.",
+      "innocent": "I was bidding on pieces in the main auction room."
+    },
+    "gallerist": {
+      "guilty": "Eleanor found out about my forgery operation and threatened to expose me.",
+      "innocent": "I was busy networking with clients throughout the night."
+    },
+    "critic": {
+      "guilty": "Eleanor knew about my unethical dealings and was going to ruin my reputation.",
+      "innocent": "I was writing notes on the new exhibits all evening."
+    },
+    "intern": {
+      "guilty": "Eleanor promised to help my career but then humiliated me publicly.",
+      "innocent": "I was running errands and helping set up displays most of the night."
+    }
+  },
+  "clues": [
+    {"act": 1, "clue_text": "A gallery security badge with a forged swipe log from 10:45 PM.", "importance": "Shows unauthorized access to the restricted area."},
+    {"act": 2, "clue_text": "A crumpled auction catalog page with large sums circled and the initials 'V'.", "importance": "Reveals financial motive."},
+    {"act": 3, "clue_text": "Traces of rare ultramarine pigment on the victim’s clothing and a broken gallery key fob.", "importance": "Ties someone involved in handling artworks."}
+  ],
+  "accusation_phase": "It’s time for accusations! We’ll go around one by one. State your character name clearly and tell us who you believe is the murderer and why.",
+  "reveal_phase": "The murderer was… [Murderer Name]! Will the accused please stand and read your full confession to the group?",
+  "roles": [
+    {"role_id": "curator", "default_name": "Dr. Julian Hart"},
+    {"role_id": "artist", "default_name": "Isabella Reyes"},
+    {"role_id": "collector", "default_name": "Marcus Lang"},
+    {"role_id": "gallerist", "default_name": "Victoria 'Vivi' Sloane"},
+    {"role_id": "critic", "default_name": "Dr. Lena Moreau"},
+    {"role_id": "intern", "default_name": "Taylor Quinn"}
+  ],
+  "supporting_roles": [
+    {"role_id": "security", "default_name": "Security Chief Ramos"},
+    {"role_id": "patron", "default_name": "Socialite Elena Grant"},
+    {"role_id": "photographer", "default_name": "Alex Rivera"},
+    {"role_id": "board_member", "default_name": "Richard Langford"}
+  ],
+  "generation_rules": {
+    "min_players": 6,
+    "max_players": 12,
+    "core_roles_required": ["curator", "artist", "collector", "gallerist", "critic", "intern"],
+    "gender_flexible": true,
+    "name_style": "Artsy, sophisticated names"
+  }
+}
