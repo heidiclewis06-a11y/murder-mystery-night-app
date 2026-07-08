@@ -1,0 +1,66 @@
+{
+  "story_id": "curse_of_the_crimson_cutlass",
+  "title": "Curse of the Crimson Cutlass",
+  "theme": "Pirate Dinner Show",
+  "duration_minutes": 90,
+  "description": "During a raucous pirate-themed dinner show, the legendary Mapmaker Moss is murdered mid-performance. As the audience becomes suspects, hidden romances, financial desperation, and backstage betrayals surface in this swashbuckling night of intrigue and laughter.",
+  "core_plot": "During the grand finale swordfight, Old Mapmaker Moss is stabbed with a real cutlass. The famous Treasure Map of Blackbeard’s Ghost vanishes.",
+  "victim": "Old Mapmaker Moss",
+  "motive_summary": "Financial pressure, romantic jealousy, and fear of secrets being revealed.",
+  "twist_ending": "The 'treasure map' is not about gold — it carries a warning: 'True treasure lies in the friends ye sail with.' Moss died protecting this message about loyalty.",
+  "possible_murderers": ["captain", "first_mate", "cook", "singer", "treasure_hunter", "stagehand"],
+  "confessions": {
+    "captain": {
+      "guilty": "Moss was going to expose that I had been cutting corners with the props to save the show. I couldn’t let everything fall apart.",
+      "innocent": "This is ridiculous. I was in my dressing room counting the night’s ticket sales when it happened."
+    },
+    "first_mate": {
+      "guilty": "Moss found out I was skimming merchandise money and threatened to ruin my chances of taking over. I had to protect my future.",
+      "innocent": "I was only trying to protect Lady Velvet and keep the show running smoothly."
+    },
+    "cook": {
+      "guilty": "Moss kept insulting my cooking and flirting with Velvet. I lost control of the situation.",
+      "innocent": "I was stuck in the kitchen preparing the main course the whole time."
+    },
+    "singer": {
+      "guilty": "Moss knew dangerous secrets from my past and was going to expose me. I had no choice but to silence him.",
+      "innocent": "I was performing on stage the entire time — everyone saw me."
+    },
+    "treasure_hunter": {
+      "guilty": "The map was real and worth a fortune. Moss wouldn’t share the profits with me.",
+      "innocent": "I was searching for the real treasure the whole time."
+    },
+    "stagehand": {
+      "guilty": "They all treated me like I was nothing. Moss broke his promise to help me advance.",
+      "innocent": "I found the body first and panicked. I was just trying to help."
+    }
+  },
+  "clues": [
+    {"act": 1, "clue_text": "A torn piece of the treasure map with a distinctive compass rose stamp and the words 'Meet me at the crow’s nest – V'.", "importance": "Suggests a secret meeting."},
+    {"act": 2, "clue_text": "A crumpled betting slip in Moss’s pocket with large sums and the initial 'S'.", "importance": "Reveals financial blackmail."},
+    {"act": 3, "clue_text": "A broken prop sword hilt with a unique captain’s ring imprint and blue costume thread caught in it.", "importance": "Points to someone with access to props."}
+  ],
+  "accusation_phase": "It’s time for accusations! We’ll go around one by one. State your character name clearly and tell us who you believe is the murderer and why.",
+  "reveal_phase": "The murderer was… [Murderer Name]! Will the accused please stand and read your full confession to the group?",
+  "roles": [
+    {"role_id": "captain", "default_name": "Captain Thorne Blackwood"},
+    {"role_id": "first_mate", "default_name": "First Mate Silas 'Silver' Grant"},
+    {"role_id": "cook", "default_name": "Cook Samuel 'Salty' McGee"},
+    {"role_id": "singer", "default_name": "Lady Velvet (Victoria Lang)"},
+    {"role_id": "treasure_hunter", "default_name": "Lucky Jack Sparrowhawk"},
+    {"role_id": "stagehand", "default_name": "Riley Quinn"}
+  ],
+  "supporting_roles": [
+    {"role_id": "bartender", "default_name": "Bartender Grog Thompson"},
+    {"role_id": "musician", "default_name": "Musician Patch Malone"},
+    {"role_id": "waitress", "default_name": "Waitress Pearl Hawkins"},
+    {"role_id": "stunt_performer", "default_name": "Stunt Performer Drake Voss"}
+  ],
+  "generation_rules": {
+    "min_players": 6,
+    "max_players": 12,
+    "core_roles_required": ["captain", "first_mate", "cook", "singer", "treasure_hunter", "stagehand"],
+    "gender_flexible": true,
+    "name_style": "Pirate-themed realistic actor names"
+  }
+}
