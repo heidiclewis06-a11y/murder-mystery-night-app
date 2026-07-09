@@ -1,10 +1,63 @@
-# ====================== LIVE AI HOST MODE ======================
+import streamlit as st
+import json
+import os
+import random
+from datetime import datetime
+
+st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
+
+st.title("🔍 Mystery Night AI")
+st.subheader("Live AI Host Murder Mystery")
+
+# Load stories
+@st.cache_data
+def load_all_stories():
+    stories = {}
+    story_folder = "stories"
+    if os.path.exists(story_folder):
+        for filename in os.listdir(story_folder):
+            if filename.endswith(".json"):
+                try:
+                    with open(f"{story_folder}/{filename}", "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                        stories[data["story_id"]] = data
+                except:
+                    pass
+    return stories
+
+stories = load_all_stories()
+
+if not stories:
+    st.error("No stories found in the 'stories' folder!")
+    st.stop()
+
+# Story Selection
+story_options = {story["title"]: story_id for story_id, story in stories.items()}
+selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()))
+
+if selected_title:
+    story_id = story_options[selected_title]
+    story = stories[story_id]
+    
+    num_guests = st.number_input("Number of Guests", min_value=6, max_value=12, value=8)
+    
+    if st.button("🎲 Generate Game", type="primary", use_container_width=True):
+        murderer_role = random.choice(story.get("possible_murderers", []))
+        st.session_state.current_game = {
+            "game_id": datetime.now().strftime("%Y%m%d_%H%M%S"),
+            "story_id": story_id,
+            "num_guests": num_guests,
+            "murderer_role": murderer_role
+        }
+        st.success("✅ Game Created! Launch the AI Host below.")
+
+# ====================== HOST MODE ======================
 if "current_game" in st.session_state:
     if st.button("🎤 Launch Live AI Host", type="primary", use_container_width=True):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
-            initial = f"Welcome, everyone! I am your AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
+            initial = f"Welcome everyone to {stories[st.session_state.current_game['story_id']]['title']}! I am your AI Host for tonight."
             st.session_state.host_messages.append({"role": "host", "content": initial})
 
 if st.session_state.get("host_mode", False):
@@ -13,65 +66,18 @@ if st.session_state.get("host_mode", False):
     
     st.title(f"🎤 Live AI Host - {story['title']}")
     
-    # Display conversation history
-    for msg in st.session_state.host_messages:
+    for msg in st.session_state.get("host_messages", []):
         if msg["role"] == "host":
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
-    # Navigation
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Next Phase", type="primary"):
-            if "current_act" not in st.session_state:
-                st.session_state.current_act = 0
-            st.session_state.current_act = min(st.session_state.current_act + 1, 5)
-            st.rerun()
-    with col2:
-        if st.button("Reset Conversation"):
-            st.session_state.host_messages = []
-            st.rerun()
-
-    # AI Input
-    user_input = st.text_input("What should the AI Host say or answer?", 
-                              placeholder="Welcome guests, reveal next clue, or answer a player's question...")
+    user_input = st.text_input("What should the AI Host say or answer?", placeholder="Reveal clue, answer question, etc.")
 
     if st.button("Send to AI Host", type="primary"):
         if user_input:
             st.session_state.host_messages.append({"role": "player", "content": user_input})
-            
-            # Strong system prompt for consistency
-            system_prompt = f"""
-You are the official dramatic AI Host for the murder mystery '{story['title']}'.
-Stay completely in character. Speak theatrically and immersively.
-
-Core Knowledge (Never contradict these):
-- Plot: {story['core_plot']}
-- Victim: {story['victim']}
-- Clues revealed so far: {[c['clue_text'] for c in story['clues']]}
-- Twist Ending: {story['twist_ending']}
-
-Rules:
-- Never invent new clues or plot details.
-- Never reveal who the murderer is until the final reveal phase.
-- If asked about unknown information, respond mysteriously in character.
-- Be fun, engaging, and theatrical.
-"""
-
-            try:
-                response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_input}
-                    ],
-                    temperature=0.75,
-                    max_tokens=400
-                )
-                reply = response.choices[0].message.content.strip()
-            except:
-                reply = "The spirits are a bit foggy tonight... Could you repeat that, my dear guest?"
-
-            st.session_state.host_messages.append({"role": "host", "content": reply})
+            st.session_state.host_messages.append({"role": "host", "content": "That's a very interesting question... Let me think."})
             st.rerun()
+
+st.caption("Mystery Night AI")
