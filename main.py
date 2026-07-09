@@ -3,12 +3,25 @@ import json
 import os
 import random
 from datetime import datetime
+from openai import OpenAI
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Initialize OpenAI client with better error handling
+api_key = os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    st.error("❌ OpenAI API key not found. Please check your `.env` file.")
+    st.stop()
+
+client = OpenAI(api_key=api_key)
 
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
 st.subheader("Live AI Host Murder Mystery")
-
 # Load stories
 @st.cache_data
 def load_all_stories():
