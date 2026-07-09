@@ -37,25 +37,15 @@ if not stories:
     st.error("No stories found in the 'stories' folder!")
     st.stop()
 
-# Story Selection with unique key
+# Story Selection
 story_options = {story["title"]: story_id for story_id, story in stories.items()}
-selected_title = st.selectbox(
-    "Choose a Mystery Story", 
-    options=list(story_options.keys()),
-    key="story_select"
-)
+selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()), key="story_select")
 
 if selected_title:
     story_id = story_options[selected_title]
     story = stories[story_id]
     
-    num_guests = st.number_input(
-        "Number of Guests", 
-        min_value=6, 
-        max_value=12, 
-        value=8,
-        key="guest_input"
-    )
+    num_guests = st.number_input("Number of Guests", min_value=6, max_value=12, value=8, key="guest_input")
     
     if st.button("🎲 Generate Game", type="primary", use_container_width=True, key="generate_btn"):
         murderer_role = random.choice(story.get("possible_murderers", []))
@@ -88,11 +78,9 @@ if st.session_state.get("host_mode", False):
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
-    user_input = st.text_input(
-        "What should the AI Host say or answer?", 
-        placeholder="Welcome guests, reveal next clue, or answer a question...",
-        key="user_input"
-    )
+    user_input = st.text_input("What should the AI Host say or answer?", 
+                              placeholder="Welcome guests, reveal next clue, or answer a question...", 
+                              key="user_input")
 
     if st.button("Send to AI Host", type="primary", key="send_btn"):
         if user_input:
@@ -110,7 +98,8 @@ Core Knowledge (Never break these):
 
 Rules:
 - Never invent new clues or plot details.
-- Never reveal the murderer until the final reveal.
+- Never reveal who the murderer is until the final reveal.
+- Be engaging and fun.
 """
 
             try:
@@ -124,10 +113,10 @@ Rules:
                     max_tokens=400
                 )
                 reply = response.choices[0].message.content.strip()
-            except:
-                reply = "The spirits are a bit foggy tonight... Could you repeat that?"
+            except Exception as e:
+                reply = f"The spirits are a bit foggy tonight... Could you repeat that? (Error: {str(e)[:80]})"
 
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI")
+st.caption("Mystery Night AI - Summer Project")
