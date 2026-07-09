@@ -1,1 +1,17 @@
+# Environment variables (important - keeps your API key secret)
+.env
 
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Mac OS files
+.DS_Store
+
+# Streamlit specific
+.streamlit/
+
+# Virtual environment
+venv/
+env/
