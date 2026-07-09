@@ -6,75 +6,8 @@ from datetime import datetime
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
-# Initialize OpenAI client with better error handling
-api_key = os.getenv("OPENAI_API_KEY")
-
-if not api_key:
-    st.error("❌ OpenAI API key not found. Please check your `.env` file.")
-    st.stop()
-
-client = OpenAI(api_key=api_key)
-
-st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
-
-st.title("🔍 Mystery Night AI")
-st.subheader("Live AI Host Murder Mystery")
-# Load stories
-@st.cache_data
-def load_all_stories():
-    stories = {}
-    story_folder = "stories"
-    if os.path.exists(story_folder):
-        for filename in os.listdir(story_folder):
-            if filename.endswith(".json"):
-                try:
-                    with open(f"{story_folder}/{filename}", "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                        stories[data["story_id"]] = data
-                except:
-                    pass
-    return stories
-
-stories = load_all_stories()
-
-if not stories:
-    st.error("No stories found in the 'stories' folder!")
-    st.stop()
-
-# Story Selection
-story_options = {story["title"]: story_id for story_id, story in stories.items()}
-selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()))
-
-if selected_title:
-    story_id = story_options[selected_title]
-    story = stories[story_id]
-    
-    num_guests = st.number_input("Number of Guests", min_value=6, max_value=12, value=8)
-    
-    if st.button("🎲 Generate Game", type="primary", use_container_width=True):
-        murderer_role = random.choice(story.get("possible_murderers", []))
-        st.session_state.current_game = {
-            "game_id": datetime.now().strftime("%Y%m%d_%H%M%S"),
-            "story_id": story_id,
-            "num_guests": num_guests,
-            "murderer_role": murderer_role
-        }
-        st.success("✅ Game Created! Launch the AI Host below.")
-
-import streamlit as st
-import json
-import os
-import random
-from datetime import datetime
-from openai import OpenAI
-from dotenv import load_dotenv
-
-load_dotenv()
-
-# Initialize OpenAI client
 client = OpenAI()
 
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
@@ -101,20 +34,30 @@ def load_all_stories():
 stories = load_all_stories()
 
 if not stories:
-    st.error("No stories found!")
+    st.error("No stories found in the 'stories' folder!")
     st.stop()
 
-# Story Selection
+# Story Selection with unique key
 story_options = {story["title"]: story_id for story_id, story in stories.items()}
-selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()))
+selected_title = st.selectbox(
+    "Choose a Mystery Story", 
+    options=list(story_options.keys()),
+    key="story_select"
+)
 
 if selected_title:
     story_id = story_options[selected_title]
     story = stories[story_id]
     
-    num_guests = st.number_input("Number of Guests", min_value=6, max_value=12, value=8)
+    num_guests = st.number_input(
+        "Number of Guests", 
+        min_value=6, 
+        max_value=12, 
+        value=8,
+        key="guest_input"
+    )
     
-    if st.button("🎲 Generate Game", type="primary", use_container_width=True):
+    if st.button("🎲 Generate Game", type="primary", use_container_width=True, key="generate_btn"):
         murderer_role = random.choice(story.get("possible_murderers", []))
         st.session_state.current_game = {
             "game_id": datetime.now().strftime("%Y%m%d_%H%M%S"),
@@ -126,7 +69,7 @@ if selected_title:
 
 # ====================== LIVE AI HOST ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch Live AI Host", type="primary", use_container_width=True):
+    if st.button("🎤 Launch Live AI Host", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
@@ -145,14 +88,16 @@ if st.session_state.get("host_mode", False):
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
-    user_input = st.text_input("What should the AI Host say or answer?", 
-                              placeholder="Welcome guests, reveal next clue, or answer a question...")
+    user_input = st.text_input(
+        "What should the AI Host say or answer?", 
+        placeholder="Welcome guests, reveal next clue, or answer a question...",
+        key="user_input"
+    )
 
-    if st.button("Send to AI Host", type="primary"):
+    if st.button("Send to AI Host", type="primary", key="send_btn"):
         if user_input:
             st.session_state.host_messages.append({"role": "player", "content": user_input})
             
-            # Strong system prompt
             system_prompt = f"""
 You are the dramatic AI Host for '{story['title']}'.
 Stay completely in character. Speak theatrically.
@@ -166,7 +111,6 @@ Core Knowledge (Never break these):
 Rules:
 - Never invent new clues or plot details.
 - Never reveal the murderer until the final reveal.
-- Be engaging and fun.
 """
 
             try:
@@ -180,8 +124,10 @@ Rules:
                     max_tokens=400
                 )
                 reply = response.choices[0].message.content.strip()
-            except Exception as e:
+            except:
                 reply = "The spirits are a bit foggy tonight... Could you repeat that?"
 
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
+
+st.caption("Mystery Night AI")
