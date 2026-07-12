@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Initialize Groq client
+# Initialize Groq
 groq_key = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY")
 if groq_key:
     client = Groq(api_key=groq_key)
@@ -110,7 +110,7 @@ Rules:
             try:
                 if client:
                     response = client.chat.completions.create(
-                        model="llama3-8b-8192",   # Fast and free on Groq
+                        model="llama3-8b-8192",
                         messages=[
                             {"role": "system", "content": system_prompt},
                             {"role": "user", "content": user_input}
