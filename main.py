@@ -3,23 +3,11 @@ import json
 import os
 import random
 from datetime import datetime
-from groq import Groq
-from dotenv import load_dotenv
-import requests
-
-load_dotenv()
-
-# Initialize Groq
-groq_key = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY")
-client = Groq(api_key=groq_key) if groq_key else None
-
-# ElevenLabs
-elevenlabs_key = os.getenv("ELEVENLABS_API_KEY") or st.secrets.get("ELEVENLABS_API_KEY")
 
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host with Voice")
+st.subheader("Free AI Host with Voice & Avatar")
 
 # Load stories
 @st.cache_data
@@ -40,7 +28,7 @@ def load_all_stories():
 stories = load_all_stories()
 
 if not stories:
-    st.error("No stories found in the 'stories' folder!")
+    st.error("No stories found!")
     st.stop()
 
 # Story Selection
@@ -63,9 +51,9 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST WITH VOICE ======================
+# ====================== FREE AI HOST WITH AVATAR & VOICE ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch Live AI Host with Voice", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch Free AI Host with Avatar", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
@@ -76,29 +64,33 @@ if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
     story = stories[game["story_id"]]
     
-    st.title(f"🎤 Live AI Host - {story['title']}")
+    st.title(f"🎤 AI Host - {story['title']}")
     
-    for i, msg in enumerate(st.session_state.host_messages):
+    # Simple Avatar
+    st.markdown("""
+    <div style="text-align: center; font-size: 80px; margin: 20px;">
+        🏴‍☠️
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.caption("Animated Pirate Host")
+    
+    for msg in st.session_state.host_messages:
         if msg["role"] == "host":
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
-            if elevenlabs_key and st.button(f"🔊 Play Voice", key=f"play_{i}"):
+            if st.button(f"🔊 Speak: {msg['content'][:30]}...", key=f"play_{len(st.session_state.host_messages)}"):
                 try:
-                    voice_id = "21m00Tcm4TlvDq8ikWAM"  # Rachel voice
-                    response = requests.post(
-                        f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
-                        json={"text": msg['content']},
-                        headers={
-                            "Accept": "audio/mpeg",
-                            "xi-api-key": elevenlabs_key,
-                            "Content-Type": "application/json"
-                        }
-                    )
-                    if response.status_code == 200:
-                        st.audio(response.content, format="audio/mp3")
-                    else:
-                        st.error(f"Voice Error: {response.status_code}")
-                except Exception as e:
-                    st.error(f"Voice playback failed: {str(e)}")
+                    # Use browser's built-in speech
+                    st.components.v1.html(f"""
+                    <script>
+                        var utterance = new SpeechSynthesisUtterance("{msg['content'].replace('"', '\\"')}");
+                        utterance.rate = 0.95;
+                        utterance.pitch = 1.1;
+                        speechSynthesis.speak(utterance);
+                    </script>
+                    """, height=0)
+                except:
+                    st.warning("Voice playback failed.")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
@@ -109,36 +101,8 @@ if st.session_state.get("host_mode", False):
     if st.button("Send to AI Host", type="primary", key="send_btn"):
         if user_input:
             st.session_state.host_messages.append({"role": "player", "content": user_input})
-            
-            system_prompt = f"""
-You are the dramatic AI Host for '{story['title']}'.
-Stay completely in character. Speak theatrically.
-
-Core Knowledge (Never break these):
-- Plot: {story['core_plot']}
-- Victim: {story['victim']}
-- Clues: {[c['clue_text'] for c in story['clues']]}
-- Twist: {story['twist_ending']}
-"""
-
-            try:
-                if client:
-                    response = client.chat.completions.create(
-                        model="llama-3.1-8b-instant",
-                        messages=[
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": user_input}
-                        ],
-                        temperature=0.7,
-                        max_tokens=400
-                    )
-                    reply = response.choices[0].message.content.strip()
-                else:
-                    reply = "The spirits are a bit foggy tonight..."
-            except:
-                reply = "The spirits are a bit foggy tonight..."
-
+            reply = "That's a clever question... Let me think about that."
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + ElevenLabs Voice")
+st.caption("Mystery Night AI - Completely Free Version (Browser Voice + Simple Avatar)")
