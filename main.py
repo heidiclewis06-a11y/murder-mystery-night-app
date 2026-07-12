@@ -21,7 +21,7 @@ st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide
 st.title("🔍 Mystery Night AI")
 st.subheader("Live Gemini AI Host Murder Mystery")
 
-# Load stories (same as before)
+# Load stories
 @st.cache_data
 def load_all_stories():
     stories = {}
@@ -40,7 +40,7 @@ def load_all_stories():
 stories = load_all_stories()
 
 if not stories:
-    st.error("No stories found!")
+    st.error("No stories found in the 'stories' folder!")
     st.stop()
 
 # Story Selection
@@ -105,14 +105,17 @@ Core Knowledge (Never break these):
 Rules:
 - Never invent new clues or plot details.
 - Never reveal the murderer until the final reveal.
-- Be fun and immersive.
+- Be fun, witty, and immersive.
 """
 
             try:
-                response = model.generate_content(system_prompt + "\n\nUser: " + user_input)
-                reply = response.text
+                if model:
+                    response = model.generate_content(system_prompt + "\n\nUser input: " + user_input)
+                    reply = response.text
+                else:
+                    reply = "The spirits are a bit foggy tonight... Could you repeat that?"
             except Exception as e:
-                reply = "The spirits are a bit foggy tonight... Could you repeat that?"
+                reply = f"The spirits are a bit foggy tonight... (Error: {str(e)[:80]})"
 
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
