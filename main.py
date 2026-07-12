@@ -8,11 +8,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Initialize Gemini
+# Initialize Gemini with stable model
 gemini_key = os.getenv("GEMINI_API_KEY") or st.secrets.get("GEMINI_API_KEY")
 if gemini_key:
     genai.configure(api_key=gemini_key)
-    model = genai.GenerativeModel('gemini-1.5-flash-latest')  # More stable version
+    model = genai.GenerativeModel('gemini-pro')   # Stable model
 else:
     model = None
 
