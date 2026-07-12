@@ -12,7 +12,7 @@ load_dotenv()
 gemini_key = os.getenv("GEMINI_API_KEY") or st.secrets.get("GEMINI_API_KEY")
 if gemini_key:
     genai.configure(api_key=gemini_key)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-1.5-flash-latest')  # More stable version
 else:
     model = None
 
@@ -115,7 +115,7 @@ Rules:
                 else:
                     reply = "The spirits are a bit foggy tonight... Could you repeat that?"
             except Exception as e:
-                reply = f"The spirits are a bit foggy tonight... (Error: {str(e)[:80]})"
+                reply = f"The spirits are a bit foggy tonight... (Error: {str(e)[:100]})"
 
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
