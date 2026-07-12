@@ -7,7 +7,7 @@ from datetime import datetime
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Free AI Host with Voice & Avatar")
+st.subheader("Live AI Host Murder Mystery")
 
 # Load stories
 @st.cache_data
@@ -51,9 +51,9 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== FREE AI HOST WITH AVATAR & VOICE ======================
+# ====================== LIVE AI HOST WITH VOICE ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch Free AI Host with Avatar", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch AI Host with Voice", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
@@ -68,24 +68,21 @@ if st.session_state.get("host_mode", False):
     
     # Simple Avatar
     st.markdown("""
-    <div style="text-align: center; font-size: 80px; margin: 20px;">
+    <div style="text-align: center; font-size: 100px; margin: 20px 0;">
         🏴‍☠️
     </div>
     """, unsafe_allow_html=True)
     
-    st.caption("Animated Pirate Host")
-    
-    for msg in st.session_state.host_messages:
+    for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
-            if st.button(f"🔊 Speak: {msg['content'][:30]}...", key=f"play_{len(st.session_state.host_messages)}"):
+            if st.button(f"🔊 Speak", key=f"voice_btn_{i}"):
                 try:
-                    # Use browser's built-in speech
                     st.components.v1.html(f"""
                     <script>
                         var utterance = new SpeechSynthesisUtterance("{msg['content'].replace('"', '\\"')}");
                         utterance.rate = 0.95;
-                        utterance.pitch = 1.1;
+                        utterance.pitch = 1.0;
                         speechSynthesis.speak(utterance);
                     </script>
                     """, height=0)
@@ -105,4 +102,4 @@ if st.session_state.get("host_mode", False):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Completely Free Version (Browser Voice + Simple Avatar)")
+st.caption("Mystery Night AI - Free Version with Browser Voice")
