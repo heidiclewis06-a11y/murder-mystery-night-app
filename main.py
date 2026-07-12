@@ -3,19 +3,25 @@ import json
 import os
 import random
 from datetime import datetime
-from openai import OpenAI
+import google.generativeai as genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
-client = OpenAI()
+# Initialize Gemini
+gemini_key = os.getenv("GEMINI_API_KEY") or st.secrets.get("GEMINI_API_KEY")
+if gemini_key:
+    genai.configure(api_key=gemini_key)
+    model = genai.GenerativeModel('gemini-1.5-flash')
+else:
+    model = None
 
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live AI Host Murder Mystery")
+st.subheader("Live Gemini AI Host Murder Mystery")
 
-# Load stories
+# Load stories (same as before)
 @st.cache_data
 def load_all_stories():
     stories = {}
@@ -34,7 +40,7 @@ def load_all_stories():
 stories = load_all_stories()
 
 if not stories:
-    st.error("No stories found in the 'stories' folder!")
+    st.error("No stories found!")
     st.stop()
 
 # Story Selection
@@ -57,38 +63,38 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST ======================
+# ====================== LIVE GEMINI AI HOST ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch Live AI Host", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch Live Gemini AI Host", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
-            initial = f"Welcome everyone! I am your AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
+            initial = f"Welcome everyone! I am your Gemini AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
             st.session_state.host_messages.append({"role": "host", "content": initial})
 
 if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
     story = stories[game["story_id"]]
     
-    st.title(f"🎤 Live AI Host - {story['title']}")
+    st.title(f"🎤 Live Gemini AI Host - {story['title']}")
     
     for msg in st.session_state.host_messages:
         if msg["role"] == "host":
-            st.markdown(f"**🗣️ AI Host:** {msg['content']}")
+            st.markdown(f"**🗣️ Gemini Host:** {msg['content']}")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
-    user_input = st.text_input("What should the AI Host say or answer?", 
+    user_input = st.text_input("What should the Gemini Host say or answer?", 
                               placeholder="Welcome guests, reveal next clue, or answer a question...", 
                               key="user_input")
 
-    if st.button("Send to AI Host", type="primary", key="send_btn"):
+    if st.button("Send to Gemini Host", type="primary", key="send_btn"):
         if user_input:
             st.session_state.host_messages.append({"role": "player", "content": user_input})
             
             system_prompt = f"""
-You are the dramatic AI Host for '{story['title']}'.
-Stay completely in character. Speak theatrically.
+You are the dramatic Gemini AI Host for the murder mystery '{story['title']}'.
+Stay completely in character. Speak theatrically and engagingly.
 
 Core Knowledge (Never break these):
 - Plot: {story['core_plot']}
@@ -98,25 +104,17 @@ Core Knowledge (Never break these):
 
 Rules:
 - Never invent new clues or plot details.
-- Never reveal who the murderer is until the final reveal.
-- Be engaging and fun.
+- Never reveal the murderer until the final reveal.
+- Be fun and immersive.
 """
 
             try:
-                response = client.chat.completions.create(
-                    model="gpt-4o-mini",
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_input}
-                    ],
-                    temperature=0.7,
-                    max_tokens=400
-                )
-                reply = response.choices[0].message.content.strip()
+                response = model.generate_content(system_prompt + "\n\nUser: " + user_input)
+                reply = response.text
             except Exception as e:
-                reply = f"The spirits are a bit foggy tonight... Could you repeat that? (Error: {str(e)[:80]})"
+                reply = "The spirits are a bit foggy tonight... Could you repeat that?"
 
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Summer Project")
+st.caption("Mystery Night AI - Powered by Google Gemini")
