@@ -3,11 +3,19 @@ import json
 import os
 import random
 from datetime import datetime
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Initialize Groq
+groq_key = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY")
+client = Groq(api_key=groq_key) if groq_key else None
 
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live AI Host Murder Mystery")
+st.subheader("Live Groq AI Host Murder Mystery")
 
 # Load stories
 @st.cache_data
@@ -51,55 +59,69 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST WITH VOICE ======================
+# ====================== LIVE GROQ AI HOST ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch AI Host with Voice", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch Live Groq AI Host", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
-            initial = f"Welcome everyone! I am your AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
+            initial = f"Welcome everyone! I am your Groq AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
             st.session_state.host_messages.append({"role": "host", "content": initial})
 
 if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
     story = stories[game["story_id"]]
     
-    st.title(f"🎤 AI Host - {story['title']}")
+    st.title(f"🎤 Live Groq AI Host - {story['title']}")
     
-    # Simple Avatar
-    st.markdown("""
-    <div style="text-align: center; font-size: 100px; margin: 20px 0;">
-        🏴‍☠️
-    </div>
-    """, unsafe_allow_html=True)
-    
-    for i, msg in enumerate(st.session_state.host_messages):
+    for msg in st.session_state.host_messages:
         if msg["role"] == "host":
-            st.markdown(f"**🗣️ AI Host:** {msg['content']}")
-            if st.button(f"🔊 Speak", key=f"voice_btn_{i}"):
-                try:
-                    st.components.v1.html(f"""
-                    <script>
-                        var utterance = new SpeechSynthesisUtterance("{msg['content'].replace('"', '\\"')}");
-                        utterance.rate = 0.95;
-                        utterance.pitch = 1.0;
-                        speechSynthesis.speak(utterance);
-                    </script>
-                    """, height=0)
-                except:
-                    st.warning("Voice playback failed.")
+            st.markdown(f"**🗣️ Groq Host:** {msg['content']}")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
-    user_input = st.text_input("What should the AI Host say or answer?", 
+    user_input = st.text_input("What should the Groq Host say or answer?", 
                               placeholder="Welcome guests, reveal next clue, or answer a question...", 
                               key="user_input")
 
-    if st.button("Send to AI Host", type="primary", key="send_btn"):
+    if st.button("Send to Groq Host", type="primary", key="send_btn"):
         if user_input:
             st.session_state.host_messages.append({"role": "player", "content": user_input})
-            reply = "That's a clever question... Let me think about that."
+            
+            system_prompt = f"""
+You are the dramatic Groq AI Host for the murder mystery '{story['title']}'.
+Stay completely in character. Speak theatrically and engagingly.
+
+Core Knowledge (Never break these):
+- Plot: {story['core_plot']}
+- Victim: {story['victim']}
+- Clues: {[c['clue_text'] for c in story['clues']]}
+- Twist: {story['twist_ending']}
+
+Rules:
+- Never invent new clues or plot details.
+- Never reveal the murderer until the final reveal.
+- Be fun, witty, and immersive.
+"""
+
+            try:
+                if client:
+                    response = client.chat.completions.create(
+                        model="llama-3.1-8b-instant",
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_input}
+                        ],
+                        temperature=0.7,
+                        max_tokens=400
+                    )
+                    reply = response.choices[0].message.content.strip()
+                else:
+                    reply = "The spirits are a bit foggy tonight..."
+            except Exception as e:
+                reply = f"The spirits are a bit foggy tonight... (Error: {str(e)[:80]})"
+
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Free Version with Browser Voice")
+st.caption("Mystery Night AI - Powered by Groq")
