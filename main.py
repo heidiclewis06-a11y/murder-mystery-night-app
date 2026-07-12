@@ -5,22 +5,23 @@ import random
 from datetime import datetime
 from groq import Groq
 from dotenv import load_dotenv
+import requests
 
 load_dotenv()
 
-# Initialize Groq
+# Initialize Groq for text responses
 groq_key = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY")
-if groq_key:
-    client = Groq(api_key=groq_key)
-else:
-    client = None
+client = Groq(api_key=groq_key) if groq_key else None
+
+# ElevenLabs setup
+elevenlabs_key = os.getenv("ELEVENLABS_API_KEY") or st.secrets.get("ELEVENLABS_API_KEY")
 
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host Murder Mystery")
+st.subheader("Live Groq AI Host with Voice")
 
-# Load stories
+# Load stories (same as before)
 @st.cache_data
 def load_all_stories():
     stories = {}
@@ -39,10 +40,10 @@ def load_all_stories():
 stories = load_all_stories()
 
 if not stories:
-    st.error("No stories found in the 'stories' folder!")
+    st.error("No stories found!")
     st.stop()
 
-# Story Selection
+# Story Selection + Game Generation (same as before)
 story_options = {story["title"]: story_id for story_id, story in stories.items()}
 selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()), key="story_select")
 
@@ -62,55 +63,66 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE GROQ AI HOST ======================
+# ====================== LIVE AI HOST WITH VOICE ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch Live Groq AI Host", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch Live AI Host with Voice", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
-            initial = f"Welcome everyone! I am your Groq AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
+            initial = f"Welcome everyone! I am your AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
             st.session_state.host_messages.append({"role": "host", "content": initial})
 
 if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
     story = stories[game["story_id"]]
     
-    st.title(f"🎤 Live Groq AI Host - {story['title']}")
+    st.title(f"🎤 Live AI Host - {story['title']}")
     
     for msg in st.session_state.host_messages:
         if msg["role"] == "host":
-            st.markdown(f"**🗣️ Groq Host:** {msg['content']}")
+            st.markdown(f"**🗣️ AI Host:** {msg['content']}")
+            if elevenlabs_key and st.button(f"🔊 Play: {msg['content'][:50]}...", key=f"play_{len(st.session_state.host_messages)}"):
+                try:
+                    voice_id = "21m00Tcm4TlvDq8ikWAM"  # Rachel voice (change if you want)
+                    response = requests.post(
+                        f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
+                        json={"text": msg['content']},
+                        headers={
+                            "Accept": "audio/mpeg",
+                            "xi-api-key": elevenlabs_key,
+                            "Content-Type": "application/json"
+                        }
+                    )
+                    if response.status_code == 200:
+                        st.audio(response.content, format="audio/mp3")
+                except:
+                    st.warning("Voice playback failed.")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
-    user_input = st.text_input("What should the Groq Host say or answer?", 
+    user_input = st.text_input("What should the AI Host say or answer?", 
                               placeholder="Welcome guests, reveal next clue, or answer a question...", 
                               key="user_input")
 
-    if st.button("Send to Groq Host", type="primary", key="send_btn"):
+    if st.button("Send to AI Host", type="primary", key="send_btn"):
         if user_input:
             st.session_state.host_messages.append({"role": "player", "content": user_input})
             
             system_prompt = f"""
-You are the dramatic Groq AI Host for the murder mystery '{story['title']}'.
-Stay completely in character. Speak theatrically and engagingly.
+You are the dramatic AI Host for '{story['title']}'.
+Stay completely in character. Speak theatrically.
 
 Core Knowledge (Never break these):
 - Plot: {story['core_plot']}
 - Victim: {story['victim']}
 - Clues: {[c['clue_text'] for c in story['clues']]}
 - Twist: {story['twist_ending']}
-
-Rules:
-- Never invent new clues or plot details.
-- Never reveal the murderer until the final reveal.
-- Be fun, witty, and immersive.
 """
 
             try:
                 if client:
                     response = client.chat.completions.create(
-                        model="llama-3.1-8b-instant",   # Reliable Groq model
+                        model="llama-3.1-8b-instant",
                         messages=[
                             {"role": "system", "content": system_prompt},
                             {"role": "user", "content": user_input}
@@ -120,11 +132,11 @@ Rules:
                     )
                     reply = response.choices[0].message.content.strip()
                 else:
-                    reply = "The spirits are a bit foggy tonight... Could you repeat that?"
-            except Exception as e:
-                reply = f"The spirits are a bit foggy tonight... (Error: {str(e)[:80]})"
+                    reply = "The spirits are a bit foggy tonight..."
+            except:
+                reply = "The spirits are a bit foggy tonight..."
 
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Powered by Groq")
+st.caption("Mystery Night AI - Powered by Groq + ElevenLabs Voice")
