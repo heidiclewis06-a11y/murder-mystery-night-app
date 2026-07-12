@@ -9,11 +9,11 @@ import requests
 
 load_dotenv()
 
-# Initialize Groq for text responses
+# Initialize Groq
 groq_key = os.getenv("GROQ_API_KEY") or st.secrets.get("GROQ_API_KEY")
 client = Groq(api_key=groq_key) if groq_key else None
 
-# ElevenLabs setup
+# ElevenLabs
 elevenlabs_key = os.getenv("ELEVENLABS_API_KEY") or st.secrets.get("ELEVENLABS_API_KEY")
 
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
@@ -21,7 +21,7 @@ st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide
 st.title("🔍 Mystery Night AI")
 st.subheader("Live Groq AI Host with Voice")
 
-# Load stories (same as before)
+# Load stories
 @st.cache_data
 def load_all_stories():
     stories = {}
@@ -43,7 +43,7 @@ if not stories:
     st.error("No stories found!")
     st.stop()
 
-# Story Selection + Game Generation (same as before)
+# Story Selection
 story_options = {story["title"]: story_id for story_id, story in stories.items()}
 selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()), key="story_select")
 
@@ -70,7 +70,7 @@ if "current_game" in st.session_state:
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
             initial = f"Welcome everyone! I am your AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
-            st.session_state.host_messages.append({"role": "host", "content": initial})
+            st.session_state.host_messages.append({"role": "host", "content": initial, "id": 0})
 
 if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
@@ -78,12 +78,12 @@ if st.session_state.get("host_mode", False):
     
     st.title(f"🎤 Live AI Host - {story['title']}")
     
-    for msg in st.session_state.host_messages:
+    for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
-            if elevenlabs_key and st.button(f"🔊 Play: {msg['content'][:50]}...", key=f"play_{len(st.session_state.host_messages)}"):
+            if elevenlabs_key and st.button(f"🔊 Play Voice", key=f"play_{i}"):
                 try:
-                    voice_id = "21m00Tcm4TlvDq8ikWAM"  # Rachel voice (change if you want)
+                    voice_id = "21m00Tcm4TlvDq8ikWAM"  # Rachel voice
                     response = requests.post(
                         f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
                         json={"text": msg['content']},
@@ -95,6 +95,8 @@ if st.session_state.get("host_mode", False):
                     )
                     if response.status_code == 200:
                         st.audio(response.content, format="audio/mp3")
+                    else:
+                        st.warning("Voice playback failed.")
                 except:
                     st.warning("Voice playback failed.")
         else:
@@ -136,7 +138,7 @@ Core Knowledge (Never break these):
             except:
                 reply = "The spirits are a bit foggy tonight..."
 
-            st.session_state.host_messages.append({"role": "host", "content": reply})
+            st.session_state.host_messages.append({"role": "host", "content": reply, "id": len(st.session_state.host_messages)})
             st.rerun()
 
-st.caption("Mystery Night AI - Powered by Groq + ElevenLabs Voice")
+st.caption("Mystery Night AI - Groq + ElevenLabs Voice")
