@@ -15,7 +15,7 @@ client = Groq(api_key=groq_key) if groq_key else None
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host with 3D Avatar")
+st.subheader("Live Groq AI Host with Animated Avatar")
 
 # Load stories
 @st.cache_data
@@ -36,7 +36,7 @@ def load_all_stories():
 stories = load_all_stories()
 
 if not stories:
-    st.error("No stories found in the 'stories' folder!")
+    st.error("No stories found!")
     st.stop()
 
 # Story Selection
@@ -59,9 +59,9 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST WITH 3D AVATAR ======================
+# ====================== LIVE AI HOST WITH ANIMATED AVATAR ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch AI Host with 3D Avatar", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch AI Host with Animated Avatar", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
@@ -74,19 +74,23 @@ if st.session_state.get("host_mode", False):
     
     st.title(f"🎤 AI Host - {story['title']}")
     
-    # Ready Player Me 3D Avatar
-    st.components.v1.html("""
-    <div style="text-align: center; margin: 10px 0;">
-        <iframe 
-            src="https://models.readyplayer.me/64f8f5f8f8f8f8f8f8f8f8f8.glb" 
-            width="100%" 
-            height="420px" 
-            style="border: none; background: transparent;">
-        </iframe>
+    # Animated Pirate Avatar
+    st.markdown("""
+    <div style="text-align: center; margin: 20px 0;">
+        <div style="font-size: 120px; animation: pirate_wave 2s infinite;">
+            🏴‍☠️
+        </div>
+        <style>
+        @keyframes pirate_wave {
+            0% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+            100% { transform: rotate(-15deg); }
+        }
+        </style>
     </div>
-    """, height=450)
+    """, unsafe_allow_html=True)
     
-    st.caption("3D Pirate Host - Powered by Ready Player Me")
+    st.caption("Animated Pirate Captain Host")
     
     for msg in st.session_state.host_messages:
         if msg["role"] == "host":
@@ -133,4 +137,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + Ready Player Me 3D Avatar")
+st.caption("Mystery Night AI - Groq + Animated Avatar")
