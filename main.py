@@ -66,7 +66,7 @@ if "current_game" in st.session_state:
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
             initial = f"Welcome everyone! I am your AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
-            st.session_state.host_messages.append({"role": "host", "content": initial, "id": 0})
+            st.session_state.host_messages.append({"role": "host", "content": initial})
 
 if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
@@ -108,10 +108,11 @@ if st.session_state.get("host_mode", False):
     """, unsafe_allow_html=True)
     st.caption(caption)
 
+    # Display messages with voice buttons
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
-            if st.button(f"🔊 Speak", key=f"play_{i}"):
+            if st.button(f"🔊 Speak", key=f"voice_{i}"):
                 try:
                     st.components.v1.html(f"""
                     <script>
