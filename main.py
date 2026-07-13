@@ -105,12 +105,11 @@ if "current_game" in st.session_state:
     """, unsafe_allow_html=True)
     st.caption(caption)
 
-    # Auto-play Opening when game starts
+    # Auto-play Opening
     if len(st.session_state.get("host_messages", [])) == 0:
         opening = f"Welcome everyone to {story['title']}! I am your AI Host for this evening's thrilling murder mystery. Gather around, dim the lights, and let the investigation begin!"
         st.session_state.host_messages.append({"role": "host", "content": opening})
         
-        # Auto speak the opening
         clean_opening = re.sub(r'\(.*?\)', '', opening).strip()
         st.components.v1.html(f"""
         <script>
@@ -121,10 +120,11 @@ if "current_game" in st.session_state:
         </script>
         """, height=0)
 
-    # Display messages with voice buttons
+    # Display messages
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
             clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()
+            clean_text = re.sub(r'\[.*?\]', '', clean_text).strip()
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
             if st.button(f"🔊 Speak", key=f"voice_{i}"):
                 try:
@@ -153,18 +153,18 @@ if "current_game" in st.session_state:
             
             system_prompt = f"""
 You are the dramatic AI Host for '{story['title']}'.
-Stay completely in character. Speak theatrically.
+
+IMPORTANT RULES:
+- Speak ONLY the words you would say out loud.
+- NEVER use parentheses, brackets, or stage directions like (Dramatic music...) or (sigh).
+- NEVER describe your own actions.
+- Be theatrical but speak directly to the guests.
 
 Core Knowledge (Never break these):
 - Plot: {story['core_plot']}
 - Victim: {story['victim']}
 - Clues: {[c['clue_text'] for c in story['clues']]}
 - Twist: {story['twist_ending']}
-
-Strict Rules:
-- NEVER use parentheses or stage directions.
-- Speak only the words you would say out loud.
-- Be theatrical but direct.
 """
 
             try:
@@ -175,8 +175,8 @@ Strict Rules:
                             {"role": "system", "content": system_prompt},
                             {"role": "user", "content": user_input}
                         ],
-                        temperature=0.7,
-                        max_tokens=400
+                        temperature=0.6,
+                        max_tokens=350
                     )
                     reply = response.choices[0].message.content.strip()
                 else:
