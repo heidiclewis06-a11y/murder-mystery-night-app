@@ -112,7 +112,6 @@ if st.session_state.get("host_mode", False):
     # Display messages with voice buttons
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
-            # Clean text for speaking
             clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()
             clean_text = re.sub(r'\[.*?\]', '', clean_text).strip()
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
@@ -142,7 +141,7 @@ if st.session_state.get("host_mode", False):
             
             system_prompt = f"""
 You are the dramatic AI Host for '{story['title']}'.
-Stay completely in character. Speak theatrically.
+Speak ONLY the words you would say out loud. No stage directions. No parentheses. No (Dramatic music...) or similar.
 
 Core Knowledge (Never break these):
 - Plot: {story['core_plot']}
@@ -151,10 +150,9 @@ Core Knowledge (Never break these):
 - Twist: {story['twist_ending']}
 
 Strict Rules:
-- NEVER use parentheses or stage directions.
-- NEVER describe actions.
-- Speak ONLY as the host would say it out loud.
-- Be theatrical but direct.
+- NEVER use parentheses or brackets.
+- Speak naturally as if addressing the guests directly.
+- Be theatrical but direct. No describing actions.
 """
 
             try:
