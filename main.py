@@ -36,7 +36,7 @@ def load_all_stories():
 stories = load_all_stories()
 
 if not stories:
-    st.error("No stories found!")
+    st.error("No stories found in the 'stories' folder!")
     st.stop()
 
 # Story Selection
@@ -74,15 +74,17 @@ if st.session_state.get("host_mode", False):
     
     st.title(f"🎤 AI Host - {story['title']}")
     
-    # Ready Player Me 3D Avatar (Pirate Theme)
+    # Ready Player Me 3D Avatar
     st.components.v1.html("""
-    <iframe 
-        src="https://models.readyplayer.me/64f8f5f8f8f8f8f8f8f8f8f8.glb" 
-        width="100%" 
-        height="400px" 
-        style="border: none; background: #0e1117;">
-    </iframe>
-    """, height=420)
+    <div style="text-align: center; margin: 10px 0;">
+        <iframe 
+            src="https://models.readyplayer.me/64f8f5f8f8f8f8f8f8f8f8f8.glb" 
+            width="100%" 
+            height="420px" 
+            style="border: none; background: transparent;">
+        </iframe>
+    </div>
+    """, height=450)
     
     st.caption("3D Pirate Host - Powered by Ready Player Me")
     
@@ -131,4 +133,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + Ready Player Me Avatar")
+st.caption("Mystery Night AI - Groq + Ready Player Me 3D Avatar")
