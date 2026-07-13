@@ -15,7 +15,7 @@ client = Groq(api_key=groq_key) if groq_key else None
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host with Animated Avatar")
+st.subheader("Live Groq AI Host with Animated Pirate")
 
 # Load stories
 @st.cache_data
@@ -59,9 +59,9 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST WITH CSS AVATAR ======================
+# ====================== LIVE AI HOST WITH PIRATE AVATAR ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch AI Host with Animated Avatar", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch AI Host with Pirate Avatar", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
@@ -74,26 +74,36 @@ if st.session_state.get("host_mode", False):
     
     st.title(f"🎤 AI Host - {story['title']}")
     
-    # CSS Animated Human-like Avatar
+    # Animated Pirate Avatar with Mouth Movement
     st.markdown("""
     <div style="text-align: center; margin: 20px 0;">
-        <div class="avatar-container">
-            <div class="avatar-head">🧔‍♂️</div>
-            <div class="avatar-body">👔</div>
+        <div class="pirate-avatar">
+            <div class="hat">🏴‍☠️</div>
+            <div class="head">🧔</div>
+            <div class="mouth" id="mouth">👄</div>
         </div>
         <style>
-        .avatar-container {
-            animation: speak 0.6s infinite alternate;
+        .pirate-avatar {
+            font-size: 90px;
+            animation: bob 1.5s infinite alternate;
+        }
+        @keyframes bob {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+        .mouth {
+            font-size: 40px;
+            animation: speak 0.3s infinite alternate;
+            margin-top: -20px;
         }
         @keyframes speak {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.08); }
+            0% { transform: scaleY(0.6); }
+            100% { transform: scaleY(1.4); }
         }
-        .avatar-head {
-            font-size: 90px;
-            animation: head-move 0.4s infinite alternate;
+        .hat {
+            animation: hat-move 2s infinite alternate;
         }
-        @keyframes head-move {
+        @keyframes hat-move {
             0% { transform: rotate(-8deg); }
             100% { transform: rotate(8deg); }
         }
@@ -101,7 +111,7 @@ if st.session_state.get("host_mode", False):
     </div>
     """, unsafe_allow_html=True)
     
-    st.caption("Animated Human Host (Speaking)")
+    st.caption("Animated Pirate Captain (Speaking)")
 
     for msg in st.session_state.host_messages:
         if msg["role"] == "host":
@@ -148,4 +158,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + CSS Animated Avatar")
+st.caption("Mystery Night AI - Groq + Animated Pirate Avatar")
