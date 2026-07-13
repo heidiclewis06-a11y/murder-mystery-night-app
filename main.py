@@ -66,7 +66,7 @@ if "current_game" in st.session_state:
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
             initial = f"Welcome everyone! I am your AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
-            st.session_state.host_messages.append({"role": "host", "content": initial})
+            st.session_state.host_messages.append({"role": "host", "content": initial, "id": 0})
 
 if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
@@ -78,28 +78,28 @@ if st.session_state.get("host_mode", False):
     if "crimson" in story["story_id"]:
         avatar = "🏴‍☠️"
         caption = "Pirate Captain"
-        voice_rate = 0.95
-        voice_pitch = 1.1
+        rate = 0.95
+        pitch = 1.1
     elif "azure" in story["story_id"]:
         avatar = "🚢"
         caption = "Cruise Ship Captain"
-        voice_rate = 1.0
-        voice_pitch = 0.95
+        rate = 1.0
+        pitch = 0.95
     elif "gallery" in story["story_id"]:
         avatar = "🖼️"
         caption = "Art Gallery Host"
-        voice_rate = 0.9
-        voice_pitch = 1.2
+        rate = 0.9
+        pitch = 1.2
     elif "smoke" in story["story_id"]:
         avatar = "🚬"
         caption = "1920s Speakeasy Host"
-        voice_rate = 1.05
-        voice_pitch = 0.9
+        rate = 1.05
+        pitch = 0.9
     else:
         avatar = "🕵️"
         caption = "AI Host"
-        voice_rate = 1.0
-        voice_pitch = 1.0
+        rate = 1.0
+        pitch = 1.0
 
     st.markdown(f"""
     <div style="text-align: center; font-size: 110px; margin: 20px 0; animation: speak 0.5s infinite alternate;">
@@ -116,8 +116,8 @@ if st.session_state.get("host_mode", False):
                     st.components.v1.html(f"""
                     <script>
                         var utterance = new SpeechSynthesisUtterance("{msg['content'].replace('"', '\\"')}");
-                        utterance.rate = {voice_rate};
-                        utterance.pitch = {voice_pitch};
+                        utterance.rate = {rate};
+                        utterance.pitch = {pitch};
                         speechSynthesis.speak(utterance);
                     </script>
                     """, height=0)
