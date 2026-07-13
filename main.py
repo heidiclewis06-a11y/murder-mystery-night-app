@@ -15,7 +15,7 @@ client = Groq(api_key=groq_key) if groq_key else None
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host with Story-Specific Avatars")
+st.subheader("Live Groq AI Host with Voice")
 
 # Load stories
 @st.cache_data
@@ -59,9 +59,9 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST WITH STORY-SPECIFIC AVATAR ======================
+# ====================== LIVE AI HOST WITH VOICE ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch AI Host", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch AI Host with Voice", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
@@ -74,41 +74,55 @@ if st.session_state.get("host_mode", False):
     
     st.title(f"🎤 AI Host - {story['title']}")
     
-    # Story-Specific Avatars
+    # Story-Specific Avatar
     if "crimson" in story["story_id"]:
-        avatar = "🏴‍☠️"  # Pirate Flag
-        caption = "Pirate Captain Host"
+        avatar = "🏴‍☠️"
+        caption = "Pirate Captain"
+        voice_rate = 0.95
+        voice_pitch = 1.1
     elif "azure" in story["story_id"]:
-        avatar = "🚢"  # Cruise Ship
-        caption = "Cruise Ship Captain Host"
+        avatar = "🚢"
+        caption = "Cruise Ship Captain"
+        voice_rate = 1.0
+        voice_pitch = 0.95
     elif "gallery" in story["story_id"]:
-        avatar = "🖼️"  # Painting
-        caption = "Art Gallery Curator Host"
+        avatar = "🖼️"
+        caption = "Art Gallery Host"
+        voice_rate = 0.9
+        voice_pitch = 1.2
     elif "smoke" in story["story_id"]:
-        avatar = "🚬"  # Cigarette
+        avatar = "🚬"
         caption = "1920s Speakeasy Host"
+        voice_rate = 1.05
+        voice_pitch = 0.9
     else:
         avatar = "🕵️"
         caption = "AI Host"
-    
-    # Animated Avatar
+        voice_rate = 1.0
+        voice_pitch = 1.0
+
     st.markdown(f"""
-    <div style="text-align: center; margin: 20px 0; font-size: 110px; animation: speak 0.6s infinite alternate;">
+    <div style="text-align: center; font-size: 110px; margin: 20px 0; animation: speak 0.5s infinite alternate;">
         {avatar}
     </div>
-    <style>
-    @keyframes speak {{
-        0% {{ transform: scale(1); }}
-        100% {{ transform: scale(1.12); }}
-    }}
-    </style>
     """, unsafe_allow_html=True)
-    
     st.caption(caption)
 
-    for msg in st.session_state.host_messages:
+    for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
+            if st.button(f"🔊 Speak", key=f"play_{i}"):
+                try:
+                    st.components.v1.html(f"""
+                    <script>
+                        var utterance = new SpeechSynthesisUtterance("{msg['content'].replace('"', '\\"')}");
+                        utterance.rate = {voice_rate};
+                        utterance.pitch = {voice_pitch};
+                        speechSynthesis.speak(utterance);
+                    </script>
+                    """, height=0)
+                except:
+                    st.warning("Voice playback failed.")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
@@ -151,4 +165,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + Story-Specific Avatars")
+st.caption("Mystery Night AI - Groq + Story-Specific Voice")
