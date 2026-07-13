@@ -112,7 +112,8 @@ if st.session_state.get("host_mode", False):
     # Display messages with voice buttons
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
-            clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()  # Remove parenthetical directions
+            # Clean text for speaking (remove stage directions)
+            clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
             if st.button(f"🔊 Speak", key=f"voice_{i}"):
                 try:
@@ -124,7 +125,7 @@ if st.session_state.get("host_mode", False):
                         speechSynthesis.speak(utterance);
                     </script>
                     """, height=0)
-                    st.success("🔊 Speaking cleaned text...")
+                    st.success("🔊 Speaking...")
                 except:
                     st.warning("Voice playback failed. Try Chrome or Edge.")
         else:
@@ -147,6 +148,12 @@ Core Knowledge (Never break these):
 - Victim: {story['victim']}
 - Clues: {[c['clue_text'] for c in story['clues']]}
 - Twist: {story['twist_ending']}
+
+Rules:
+- Never use parentheses or stage directions like (Dramatic music...).
+- Never invent new clues or plot details.
+- Never reveal the murderer until the final reveal.
+- Be fun, witty, and immersive.
 """
 
             try:
@@ -169,4 +176,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + Browser Voice (Cleaned Text)")
+st.caption("Mystery Night AI - Groq + Browser Voice")
