@@ -16,7 +16,7 @@ client = Groq(api_key=groq_key) if groq_key else None
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host with Voice")
+st.subheader("Live Groq AI Host with Voice & Avatars")
 
 # Load stories
 @st.cache_data
@@ -40,36 +40,32 @@ if not stories:
     st.error("No stories found!")
     st.stop()
 
-# Story Selection
-story_options = {story["title"]: story_id for story_id, story in stories.items()}
-selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()), key="story_select")
+# Sidebar for game setup
+with st.sidebar:
+    st.header("Game Setup")
+    story_options = {story["title"]: story_id for story_id, story in stories.items()}
+    selected_title = st.selectbox("Choose a Mystery Story", options=list(story_options.keys()), key="story_select")
 
-if selected_title:
-    story_id = story_options[selected_title]
-    story = stories[story_id]
-    
-    num_guests = st.number_input("Number of Guests", min_value=6, max_value=12, value=8, key="guest_input")
-    
-    if st.button("🎲 Generate Game", type="primary", use_container_width=True, key="generate_btn"):
-        murderer_role = random.choice(story.get("possible_murderers", []))
-        st.session_state.current_game = {
-            "game_id": datetime.now().strftime("%Y%m%d_%H%M%S"),
-            "story_id": story_id,
-            "num_guests": num_guests,
-            "murderer_role": murderer_role
-        }
-        st.success("✅ Game Created!")
+    if selected_title:
+        story_id = story_options[selected_title]
+        story = stories[story_id]
+        
+        num_guests = st.number_input("Number of Guests", min_value=6, max_value=12, value=8, key="guest_input")
+        
+        if st.button("🎲 Generate Game", type="primary", use_container_width=True, key="generate_btn"):
+            murderer_role = random.choice(story.get("possible_murderers", []))
+            st.session_state.current_game = {
+                "game_id": datetime.now().strftime("%Y%m%d_%H%M%S"),
+                "story_id": story_id,
+                "num_guests": num_guests,
+                "murderer_role": murderer_role
+            }
+            if "host_messages" not in st.session_state:
+                st.session_state.host_messages = []
+            st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST WITH VOICE ======================
+# ====================== MAIN AI HOST ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch AI Host with Voice", type="primary", use_container_width=True, key="host_btn"):
-        st.session_state.host_mode = True
-        if "host_messages" not in st.session_state:
-            st.session_state.host_messages = []
-            initial = f"Welcome everyone! I am your AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
-            st.session_state.host_messages.append({"role": "host", "content": initial})
-
-if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
     story = stories[game["story_id"]]
     
@@ -113,7 +109,6 @@ if st.session_state.get("host_mode", False):
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
             clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()
-            clean_text = re.sub(r'\[.*?\]', '', clean_text).strip()
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
             if st.button(f"🔊 Speak", key=f"voice_{i}"):
                 try:
@@ -127,12 +122,13 @@ if st.session_state.get("host_mode", False):
                     """, height=0)
                     st.success("🔊 Speaking...")
                 except:
-                    st.warning("Voice playback failed. Try Chrome or Edge.")
+                    st.warning("Voice playback failed.")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
+    # User input
     user_input = st.text_input("What should the AI Host say or answer?", 
-                              placeholder="Welcome guests, reveal next clue, or answer a question...", 
+                              placeholder="Reveal next clue, answer a question, or give instructions...", 
                               key="user_input")
 
     if st.button("Send to AI Host", type="primary", key="send_btn"):
@@ -141,7 +137,7 @@ if st.session_state.get("host_mode", False):
             
             system_prompt = f"""
 You are the dramatic AI Host for '{story['title']}'.
-Speak ONLY the words you would say out loud. No stage directions. No parentheses. No (Dramatic music...) or similar.
+Stay completely in character. Speak theatrically.
 
 Core Knowledge (Never break these):
 - Plot: {story['core_plot']}
@@ -150,9 +146,9 @@ Core Knowledge (Never break these):
 - Twist: {story['twist_ending']}
 
 Strict Rules:
-- NEVER use parentheses or brackets.
-- Speak naturally as if addressing the guests directly.
-- Be theatrical but direct. No describing actions.
+- NEVER use parentheses or stage directions.
+- Speak only the words you would say out loud.
+- Be theatrical but direct.
 """
 
             try:
@@ -174,5 +170,28 @@ Strict Rules:
 
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
+
+    # Phase Control
+    st.divider()
+    st.subheader("Phase Control")
+    if "current_act" not in st.session_state:
+        st.session_state.current_act = 0
+    acts = ["Introduction", "Act 1", "Act 2", "Act 3", "Accusations", "Reveal"]
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("← Previous Phase"):
+            if st.session_state.current_act > 0:
+                st.session_state.current_act -= 1
+                st.rerun()
+    with col2:
+        if st.button("Next Phase →", type="primary"):
+            if st.session_state.current_act < len(acts)-1:
+                st.session_state.current_act += 1
+                st.rerun()
+
+    st.write(f"**Current Phase:** {acts[st.session_state.current_act]}")
+
+else:
+    st.info("Please generate a game to begin.")
 
 st.caption("Mystery Night AI - Groq + Browser Voice")
