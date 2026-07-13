@@ -108,11 +108,10 @@ if st.session_state.get("host_mode", False):
     """, unsafe_allow_html=True)
     st.caption(caption)
 
-    # Display messages with voice buttons
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
-            if st.button(f"🔊 Speak", key=f"voice_{i}"):
+            if st.button(f"🔊 Speak", key=f"voice_btn_{i}"):
                 try:
                     st.components.v1.html(f"""
                     <script>
@@ -122,8 +121,9 @@ if st.session_state.get("host_mode", False):
                         speechSynthesis.speak(utterance);
                     </script>
                     """, height=0)
+                    st.success("🔊 Speaking...")
                 except:
-                    st.warning("Voice playback failed.")
+                    st.warning("Voice playback failed. Try Chrome or Edge browser.")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
@@ -166,4 +166,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + Story-Specific Voice")
+st.caption("Mystery Night AI - Groq + Browser Voice")
