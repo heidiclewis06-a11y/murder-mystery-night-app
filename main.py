@@ -112,7 +112,6 @@ if st.session_state.get("host_mode", False):
     # Display messages with voice buttons
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
-            # Clean text for speaking (remove stage directions)
             clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
             if st.button(f"🔊 Speak", key=f"voice_{i}"):
@@ -149,11 +148,11 @@ Core Knowledge (Never break these):
 - Clues: {[c['clue_text'] for c in story['clues']]}
 - Twist: {story['twist_ending']}
 
-Rules:
-- Never use parentheses or stage directions like (Dramatic music...).
-- Never invent new clues or plot details.
-- Never reveal the murderer until the final reveal.
-- Be fun, witty, and immersive.
+Strict Rules:
+- NEVER use parentheses or stage directions like (Dramatic music...) or (Deep sigh...).
+- NEVER describe actions in brackets or parentheses.
+- Speak ONLY as the host would say it out loud.
+- Be theatrical but direct.
 """
 
             try:
