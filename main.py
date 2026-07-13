@@ -109,7 +109,7 @@ if st.session_state.get("host_mode", False):
     """, unsafe_allow_html=True)
     st.caption(caption)
 
-    # Display messages with voice buttons
+    # Display messages
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
             clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()
@@ -126,7 +126,7 @@ if st.session_state.get("host_mode", False):
                     """, height=0)
                     st.success("🔊 Speaking...")
                 except:
-                    st.warning("Voice playback failed. Try Chrome or Edge.")
+                    st.warning("Voice playback failed.")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
@@ -140,7 +140,7 @@ if st.session_state.get("host_mode", False):
             
             system_prompt = f"""
 You are the dramatic AI Host for '{story['title']}'.
-Stay completely in character. Speak theatrically.
+Speak ONLY as the host would say it out loud. No stage directions. No parentheses. No (Dramatic music...) or similar.
 
 Core Knowledge (Never break these):
 - Plot: {story['core_plot']}
@@ -148,10 +148,9 @@ Core Knowledge (Never break these):
 - Clues: {[c['clue_text'] for c in story['clues']]}
 - Twist: {story['twist_ending']}
 
-Strict Rules:
-- NEVER use parentheses or stage directions like (Dramatic music...) or (Deep sigh...).
-- NEVER describe actions in brackets or parentheses.
-- Speak ONLY as the host would say it out loud.
+Rules:
+- NEVER use parentheses or stage directions.
+- Speak naturally as if addressing the guests in person.
 - Be theatrical but direct.
 """
 
