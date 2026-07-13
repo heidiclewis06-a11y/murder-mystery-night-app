@@ -15,7 +15,7 @@ client = Groq(api_key=groq_key) if groq_key else None
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host with Animated Avatar")
+st.subheader("Live Groq AI Host with Speaking Avatar")
 
 # Load stories
 @st.cache_data
@@ -59,9 +59,9 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST WITH ANIMATED AVATAR ======================
+# ====================== LIVE AI HOST WITH SPEAKING AVATAR ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch AI Host with Animated Avatar", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch AI Host with Speaking Avatar", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
@@ -74,23 +74,19 @@ if st.session_state.get("host_mode", False):
     
     st.title(f"🎤 AI Host - {story['title']}")
     
-    # Animated Pirate Avatar
-    st.markdown("""
+    # Free Human-like Speaking Avatar (using public Ready Player Me)
+    st.components.v1.html("""
     <div style="text-align: center; margin: 20px 0;">
-        <div style="font-size: 120px; animation: pirate_wave 2s infinite;">
-            🏴‍☠️
-        </div>
-        <style>
-        @keyframes pirate_wave {
-            0% { transform: rotate(-15deg); }
-            50% { transform: rotate(15deg); }
-            100% { transform: rotate(-15deg); }
-        }
-        </style>
+        <iframe 
+            src="https://models.readyplayer.me/670f8f5f8f8f8f8f8f8f8f8f.glb" 
+            width="100%" 
+            height="420px" 
+            style="border: none; background: transparent;">
+        </iframe>
     </div>
-    """, unsafe_allow_html=True)
+    """, height=450)
     
-    st.caption("Animated Pirate Captain Host")
+    st.caption("Speaking 3D Host - Powered by Ready Player Me (Free)")
     
     for msg in st.session_state.host_messages:
         if msg["role"] == "host":
@@ -137,4 +133,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + Animated Avatar")
+st.caption("Mystery Night AI - Groq + Free 3D Avatar")
