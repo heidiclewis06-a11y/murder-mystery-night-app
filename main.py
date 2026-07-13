@@ -5,6 +5,7 @@ import random
 from datetime import datetime
 from groq import Groq
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 
@@ -108,29 +109,26 @@ if st.session_state.get("host_mode", False):
     """, unsafe_allow_html=True)
     st.caption(caption)
 
-    # Display messages
+    # Display messages with voice buttons
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
+            clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()  # Remove parenthetical directions
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
+            if st.button(f"🔊 Speak", key=f"voice_{i}"):
+                try:
+                    st.components.v1.html(f"""
+                    <script>
+                        var utterance = new SpeechSynthesisUtterance("{clean_text.replace('"', '\\"')}");
+                        utterance.rate = {rate};
+                        utterance.pitch = {pitch};
+                        speechSynthesis.speak(utterance);
+                    </script>
+                    """, height=0)
+                    st.success("🔊 Speaking cleaned text...")
+                except:
+                    st.warning("Voice playback failed. Try Chrome or Edge.")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
-
-    # Single Speak Last Message Button (Most Reliable)
-    if st.session_state.host_messages and st.session_state.host_messages[-1]["role"] == "host":
-        if st.button("🔊 Speak Last Host Message", type="primary"):
-            try:
-                last_message = st.session_state.host_messages[-1]["content"]
-                st.components.v1.html(f"""
-                <script>
-                    var utterance = new SpeechSynthesisUtterance("{last_message.replace('"', '\\"')}");
-                    utterance.rate = {rate};
-                    utterance.pitch = {pitch};
-                    speechSynthesis.speak(utterance);
-                </script>
-                """, height=0)
-                st.success("🔊 Speaking last message...")
-            except:
-                st.warning("Voice playback failed. Try Chrome or Edge.")
 
     user_input = st.text_input("What should the AI Host say or answer?", 
                               placeholder="Welcome guests, reveal next clue, or answer a question...", 
@@ -171,4 +169,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + Browser Voice")
+st.caption("Mystery Night AI - Groq + Browser Voice (Cleaned Text)")
