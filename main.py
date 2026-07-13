@@ -15,7 +15,7 @@ client = Groq(api_key=groq_key) if groq_key else None
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host with Animated Pirate")
+st.subheader("Live Groq AI Host with Story-Specific Avatars")
 
 # Load stories
 @st.cache_data
@@ -59,9 +59,9 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST WITH PIRATE AVATAR ======================
+# ====================== LIVE AI HOST WITH STORY-SPECIFIC AVATAR ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch AI Host with Pirate Avatar", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch AI Host", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
@@ -74,44 +74,37 @@ if st.session_state.get("host_mode", False):
     
     st.title(f"🎤 AI Host - {story['title']}")
     
-    # Animated Pirate Avatar with Mouth Movement
-    st.markdown("""
-    <div style="text-align: center; margin: 20px 0;">
-        <div class="pirate-avatar">
-            <div class="hat">🏴‍☠️</div>
-            <div class="head">🧔</div>
-            <div class="mouth" id="mouth">👄</div>
-        </div>
-        <style>
-        .pirate-avatar {
-            font-size: 90px;
-            animation: bob 1.5s infinite alternate;
-        }
-        @keyframes bob {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-10px); }
-        }
-        .mouth {
-            font-size: 40px;
-            animation: speak 0.3s infinite alternate;
-            margin-top: -20px;
-        }
-        @keyframes speak {
-            0% { transform: scaleY(0.6); }
-            100% { transform: scaleY(1.4); }
-        }
-        .hat {
-            animation: hat-move 2s infinite alternate;
-        }
-        @keyframes hat-move {
-            0% { transform: rotate(-8deg); }
-            100% { transform: rotate(8deg); }
-        }
-        </style>
+    # Story-Specific Avatars
+    if "crimson" in story["story_id"]:
+        avatar = "🏴‍☠️"  # Pirate Flag
+        caption = "Pirate Captain Host"
+    elif "azure" in story["story_id"]:
+        avatar = "🚢"  # Cruise Ship
+        caption = "Cruise Ship Captain Host"
+    elif "gallery" in story["story_id"]:
+        avatar = "🖼️"  # Painting
+        caption = "Art Gallery Curator Host"
+    elif "smoke" in story["story_id"]:
+        avatar = "🚬"  # Cigarette
+        caption = "1920s Speakeasy Host"
+    else:
+        avatar = "🕵️"
+        caption = "AI Host"
+    
+    # Animated Avatar
+    st.markdown(f"""
+    <div style="text-align: center; margin: 20px 0; font-size: 110px; animation: speak 0.6s infinite alternate;">
+        {avatar}
     </div>
+    <style>
+    @keyframes speak {{
+        0% {{ transform: scale(1); }}
+        100% {{ transform: scale(1.12); }}
+    }}
+    </style>
     """, unsafe_allow_html=True)
     
-    st.caption("Animated Pirate Captain (Speaking)")
+    st.caption(caption)
 
     for msg in st.session_state.host_messages:
         if msg["role"] == "host":
@@ -158,4 +151,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + Animated Pirate Avatar")
+st.caption("Mystery Night AI - Groq + Story-Specific Avatars")
