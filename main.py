@@ -112,7 +112,7 @@ if st.session_state.get("host_mode", False):
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
-            if st.button(f"🔊 Speak", key=f"voice_{i}"):
+            if st.button(f"🔊 Speak", key=f"voice_btn_{i}"):
                 try:
                     st.components.v1.html(f"""
                     <script>
@@ -124,7 +124,7 @@ if st.session_state.get("host_mode", False):
                     """, height=0)
                     st.success("🔊 Speaking...")
                 except:
-                    st.warning("Voice playback failed. Try Chrome or Edge.")
+                    st.warning("Voice playback failed. Try Chrome or Edge browser.")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
