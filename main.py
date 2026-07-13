@@ -15,7 +15,7 @@ client = Groq(api_key=groq_key) if groq_key else None
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host Murder Mystery")
+st.subheader("Live Groq AI Host with 3D Avatar")
 
 # Load stories
 @st.cache_data
@@ -59,49 +59,56 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE GROQ AI HOST ======================
+# ====================== LIVE AI HOST WITH 3D AVATAR ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch Live Groq AI Host", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch AI Host with 3D Avatar", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
-            initial = f"Welcome everyone! I am your Groq AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
+            initial = f"Welcome everyone! I am your AI Host for tonight's thrilling mystery: {stories[st.session_state.current_game['story_id']]['title']}. Let the investigation begin!"
             st.session_state.host_messages.append({"role": "host", "content": initial})
 
 if st.session_state.get("host_mode", False):
     game = st.session_state.current_game
     story = stories[game["story_id"]]
     
-    st.title(f"🎤 Live Groq AI Host - {story['title']}")
+    st.title(f"🎤 AI Host - {story['title']}")
+    
+    # Ready Player Me 3D Avatar (Pirate Theme)
+    st.components.v1.html("""
+    <iframe 
+        src="https://models.readyplayer.me/64f8f5f8f8f8f8f8f8f8f8f8.glb" 
+        width="100%" 
+        height="400px" 
+        style="border: none; background: #0e1117;">
+    </iframe>
+    """, height=420)
+    
+    st.caption("3D Pirate Host - Powered by Ready Player Me")
     
     for msg in st.session_state.host_messages:
         if msg["role"] == "host":
-            st.markdown(f"**🗣️ Groq Host:** {msg['content']}")
+            st.markdown(f"**🗣️ AI Host:** {msg['content']}")
         else:
             st.markdown(f"**Guest:** {msg['content']}")
 
-    user_input = st.text_input("What should the Groq Host say or answer?", 
+    user_input = st.text_input("What should the AI Host say or answer?", 
                               placeholder="Welcome guests, reveal next clue, or answer a question...", 
                               key="user_input")
 
-    if st.button("Send to Groq Host", type="primary", key="send_btn"):
+    if st.button("Send to AI Host", type="primary", key="send_btn"):
         if user_input:
             st.session_state.host_messages.append({"role": "player", "content": user_input})
             
             system_prompt = f"""
-You are the dramatic Groq AI Host for the murder mystery '{story['title']}'.
-Stay completely in character. Speak theatrically and engagingly.
+You are the dramatic AI Host for '{story['title']}'.
+Stay completely in character. Speak theatrically.
 
 Core Knowledge (Never break these):
 - Plot: {story['core_plot']}
 - Victim: {story['victim']}
 - Clues: {[c['clue_text'] for c in story['clues']]}
 - Twist: {story['twist_ending']}
-
-Rules:
-- Never invent new clues or plot details.
-- Never reveal the murderer until the final reveal.
-- Be fun, witty, and immersive.
 """
 
             try:
@@ -118,10 +125,10 @@ Rules:
                     reply = response.choices[0].message.content.strip()
                 else:
                     reply = "The spirits are a bit foggy tonight..."
-            except Exception as e:
-                reply = f"The spirits are a bit foggy tonight... (Error: {str(e)[:80]})"
+            except:
+                reply = "The spirits are a bit foggy tonight..."
 
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Powered by Groq")
+st.caption("Mystery Night AI - Groq + Ready Player Me Avatar")
