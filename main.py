@@ -15,7 +15,7 @@ client = Groq(api_key=groq_key) if groq_key else None
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host with Speaking Avatar")
+st.subheader("Live Groq AI Host with Animated Avatar")
 
 # Load stories
 @st.cache_data
@@ -59,9 +59,9 @@ if selected_title:
         }
         st.success("✅ Game Created!")
 
-# ====================== LIVE AI HOST WITH SPEAKING AVATAR ======================
+# ====================== LIVE AI HOST WITH CSS AVATAR ======================
 if "current_game" in st.session_state:
-    if st.button("🎤 Launch AI Host with Speaking Avatar", type="primary", use_container_width=True, key="host_btn"):
+    if st.button("🎤 Launch AI Host with Animated Avatar", type="primary", use_container_width=True, key="host_btn"):
         st.session_state.host_mode = True
         if "host_messages" not in st.session_state:
             st.session_state.host_messages = []
@@ -74,20 +74,35 @@ if st.session_state.get("host_mode", False):
     
     st.title(f"🎤 AI Host - {story['title']}")
     
-    # Free Human-like Speaking Avatar (using public Ready Player Me)
-    st.components.v1.html("""
+    # CSS Animated Human-like Avatar
+    st.markdown("""
     <div style="text-align: center; margin: 20px 0;">
-        <iframe 
-            src="https://models.readyplayer.me/670f8f5f8f8f8f8f8f8f8f8f.glb" 
-            width="100%" 
-            height="420px" 
-            style="border: none; background: transparent;">
-        </iframe>
+        <div class="avatar-container">
+            <div class="avatar-head">🧔‍♂️</div>
+            <div class="avatar-body">👔</div>
+        </div>
+        <style>
+        .avatar-container {
+            animation: speak 0.6s infinite alternate;
+        }
+        @keyframes speak {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
+        .avatar-head {
+            font-size: 90px;
+            animation: head-move 0.4s infinite alternate;
+        }
+        @keyframes head-move {
+            0% { transform: rotate(-8deg); }
+            100% { transform: rotate(8deg); }
+        }
+        </style>
     </div>
-    """, height=450)
+    """, unsafe_allow_html=True)
     
-    st.caption("Speaking 3D Host - Powered by Ready Player Me (Free)")
-    
+    st.caption("Animated Human Host (Speaking)")
+
     for msg in st.session_state.host_messages:
         if msg["role"] == "host":
             st.markdown(f"**🗣️ AI Host:** {msg['content']}")
@@ -133,4 +148,4 @@ Core Knowledge (Never break these):
             st.session_state.host_messages.append({"role": "host", "content": reply})
             st.rerun()
 
-st.caption("Mystery Night AI - Groq + Free 3D Avatar")
+st.caption("Mystery Night AI - Groq + CSS Animated Avatar")
