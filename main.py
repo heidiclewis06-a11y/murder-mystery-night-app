@@ -105,6 +105,22 @@ if "current_game" in st.session_state:
     """, unsafe_allow_html=True)
     st.caption(caption)
 
+    # Auto-play Opening when game starts
+    if len(st.session_state.get("host_messages", [])) == 0:
+        opening = f"Welcome everyone to {story['title']}! I am your AI Host for this evening's thrilling murder mystery. Gather around, dim the lights, and let the investigation begin!"
+        st.session_state.host_messages.append({"role": "host", "content": opening})
+        
+        # Auto speak the opening
+        clean_opening = re.sub(r'\(.*?\)', '', opening).strip()
+        st.components.v1.html(f"""
+        <script>
+            var utterance = new SpeechSynthesisUtterance("{clean_opening.replace('"', '\\"')}");
+            utterance.rate = {rate};
+            utterance.pitch = {pitch};
+            speechSynthesis.speak(utterance);
+        </script>
+        """, height=0)
+
     # Display messages with voice buttons
     for i, msg in enumerate(st.session_state.host_messages):
         if msg["role"] == "host":
@@ -192,6 +208,6 @@ Strict Rules:
     st.write(f"**Current Phase:** {acts[st.session_state.current_act]}")
 
 else:
-    st.info("Please generate a game to begin.")
+    st.info("👈 Use the sidebar to select a story and generate a game to begin.")
 
 st.caption("Mystery Night AI - Groq + Browser Voice")
