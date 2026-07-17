@@ -26,27 +26,38 @@ else:
 
 st.write(f"**Story:** {story.get('title', 'Unknown')}")
 
-# Full Core 6 Characters per Story
+# Full Core 6 Characters for All Stories
 core_characters = {
     "curse_of_the_crimson_cutlass": [
-        {"name": "Captain Elias Blackthorn", "background": "Retired pirate captain who now runs the dinner show. Charismatic but haunted by his past.", "motives": "Searching for the lost Crimson Cutlass treasure.", "public_info": "Famous for his dramatic storytelling."},
-        {"name": "Lady Victoria Voss", "background": "Wealthy socialite attending the show with her husband.", "motives": "Hiding a dark secret from her past.", "public_info": "Elegant and flirtatious."},
-        {"name": "Dr. Julian Crowe", "background": "Ship's doctor turned performer.", "motives": "Blackmailing several guests.", "public_info": "Quiet and observant."},
-        {"name": "Isabella 'Izzy' Torres", "background": "Young dancer in the show.", "motives": "Knows too much about the murder.", "public_info": "Fiery and outspoken."},
-        {"name": "Mr. Reginald Hawthorne", "background": "Rich merchant with shady dealings.", "motives": "Owes money to multiple people.", "public_info": "Arrogant and loud."},
-        {"name": "Miss Penelope Sharpe", "background": "Mysterious assistant to the captain.", "motives": "Secretly in love with one of the guests.", "public_info": "Shy and bookish."}
+        {"name": "Captain Elias Blackthorn", "background": "Retired pirate captain who now runs the dinner show. Charismatic but haunted by his past.", "motives": "Secretly searching for the lost Crimson Cutlass treasure.", "public_info": "Famous for his dramatic storytelling and commanding presence."},
+        {"name": "Lady Victoria Voss", "background": "Wealthy widow attending the show.", "motives": "Looking for her husband's lost treasure map.", "public_info": "Elegant and flirtatious socialite."},
+        {"name": "Dr. Julian Crowe", "background": "Ship's doctor turned performer.", "motives": "Blackmailing several guests on board.", "public_info": "Quiet, observant, and slightly unsettling."},
+        {"name": "Isabella 'Izzy' Torres", "background": "Young dancer in the dinner show.", "motives": "Knows a dangerous secret about the murder.", "public_info": "Fiery, outspoken, and full of energy."},
+        {"name": "Mr. Reginald Hawthorne", "background": "Rich merchant with shady business dealings.", "motives": "Owes large debts to multiple people.", "public_info": "Arrogant, loud, and boastful."},
+        {"name": "Miss Penelope Sharpe", "background": "Mysterious assistant to the captain.", "motives": "Secretly in love with one of the guests.", "public_info": "Shy, bookish, and always watching."}
     ],
-    # Add other stories similarly...
     "death_on_the_azure_empress": [
-        {"name": "Captain Marcus Hale", "background": "Captain of the luxury cruise ship.", "motives": "Hiding illegal cargo.", "public_info": "Charming leader."},
-        # ... (add the other 5)
+        {"name": "Captain Marcus Hale", "background": "Experienced captain of the luxury cruise ship.", "motives": "Hiding illegal cargo on board.", "public_info": "Charming and authoritative leader."},
+        {"name": "Sophia Laurent", "background": "Famous actress on vacation.", "motives": "Running from a scandal.", "public_info": "Glamorous and dramatic."},
+        {"name": "Dr. Elena Vargas", "background": "Ship's chief medical officer.", "motives": "Involved in experimental drugs.", "public_info": "Professional and calm."},
+        {"name": "Victor Kane", "background": "Billionaire businessman.", "motives": "Involved in corporate espionage.", "public_info": "Arrogant and powerful."},
+        {"name": "Mia Chen", "background": "Young social media influencer.", "motives": "Blackmailing guests for content.", "public_info": "Outgoing and always filming."},
+        {"name": "Thomas Blackwell", "background": "Retired detective on the cruise.", "motives": "Investigating a cold case.", "public_info": "Observant and quiet."}
+    ],
+    "shadows_in_the_gallery": [
+        {"name": "Dr. Alexander Voss", "background": "Curator of the art museum.", "motives": "Selling forged paintings.", "public_info": "Knowledgeable and refined."},
+        {"name": "Isabella Moreau", "background": "Famous art collector.", "motives": "Trying to steal a valuable painting.", "public_info": "Elegant and sophisticated."},
+        # Add the remaining 4...
+    ],
+    "whispers_in_the_smoke": [
+        {"name": "Vinny Russo", "background": "Owner of the speakeasy.", "motives": "Involved in illegal activities.", "public_info": "Charismatic but dangerous."},
+        # Add the remaining 5...
     ]
-    # You can expand the other stories similarly
 }
 
 roles = core_characters.get(story_id, [])
 if not roles:
-    st.error("Core characters not defined for this story yet. Please tell me which story you're using and I will add them.")
+    st.error(f"Core characters not defined for '{story.get('title', story_id)}' yet.")
     st.stop()
 
 role_names = [role["name"] for role in roles]
