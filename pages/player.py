@@ -25,34 +25,46 @@ else:
     st.error("Story not found.")
     st.stop()
 
-# Placeholder for character selection (expand later with full packets)
+# Character Selection
 st.write(f"**Story:** {story['title']}")
-st.write(f"**Your Role:** [Character Name]")
 
-st.divider()
-
-st.subheader("Background")
-st.write("[Full background story here - innocent or guilty version]")
-
-st.subheader("Motives & Secrets")
-st.write("[Private motives and secrets]")
-
-st.divider()
-
-st.subheader("Questions to Ask Other Players")
-
-act_names = ["Introduction", "Act 1", "Act 2", "Act 3", "Accusations", "Reveal"]
-current_act = st.session_state.get("current_act", 0)
-act_name = act_names[current_act]
-
-st.write(f"**{act_name} - Questions to Ask:**")
-st.write("1. [Question 1]")
-st.write("2. [Question 2]")
-st.write("3. [Question 3]")
-
-st.divider()
-
-st.subheader("Public Information (Safe to Share)")
-st.write("[Information other players can know]")
+roles = story.get("roles", [])
+if roles:
+    role_names = [role["name"] for role in roles]
+    selected_role_name = st.selectbox("Select Your Character", options=role_names, key="selected_role")
+    
+    # Find selected role
+    selected_role = next((role for role in roles if role["name"] == selected_role_name), None)
+    
+    if selected_role:
+        st.divider()
+        
+        st.subheader(f"Your Character: {selected_role['name']}")
+        
+        st.subheader("Background")
+        st.write(selected_role.get("background", "Background information not available."))
+        
+        st.subheader("Motives & Secrets")
+        st.write(selected_role.get("motives", "Private motives not available."))
+        
+        st.subheader("Public Information (Safe to Share)")
+        st.write(selected_role.get("public_info", "No public information available."))
+        
+        st.divider()
+        
+        st.subheader("Questions to Ask Other Players")
+        current_act = st.session_state.get("current_act", 0)
+        act_names = ["Introduction", "Act 1", "Act 2", "Act 3", "Accusations", "Reveal"]
+        act_name = act_names[current_act]
+        
+        st.write(f"**{act_name} Questions:**")
+        questions = selected_role.get("questions", {}).get(f"act_{current_act}", [])
+        if questions:
+            for q in questions:
+                st.write(f"- {q}")
+        else:
+            st.write("No questions available for this act yet.")
+else:
+    st.warning("No character roles found for this story.")
 
 st.caption("Remember: Do not show this page to other players!")
