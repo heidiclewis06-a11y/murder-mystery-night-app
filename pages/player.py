@@ -26,7 +26,7 @@ else:
 
 st.write(f"**Story:** {story.get('title', 'Unknown')}")
 
-# Core Characters with Tense, In-Character Introductions
+# Core Characters with Safe Introductions
 core_characters = {
     "curse_of_the_crimson_cutlass": [
         {
@@ -48,7 +48,7 @@ core_characters = {
             "background": "A character actor who plays the ship's doctor. He is quiet and intellectual with a slightly unsettling intensity.",
             "motives": "He is blackmailing several cast members and may have supplied something used in the murder.",
             "public_info": "The ship's doctor in the show, known for his calm demeanor.",
-            "introduction": "Good evening. I am Dr. Julian Crowe. As the ship's physician, I am deeply troubled by what has occurred here tonight."
+            "introduction": "Good evening. I am Dr. Julian Crowe, the ship's physician. I am deeply troubled by what has occurred here tonight."
         },
         {
             "name": "Isabella 'Izzy' Torres",
@@ -62,7 +62,7 @@ core_characters = {
             "background": "A character actor who plays the wealthy merchant. He is loud and arrogant on stage.",
             "motives": "He owed the victim money and was arguing with him before the murder.",
             "public_info": "Wealthy merchant known for his booming voice.",
-            "introduction": "This is outrageous! I am Reginald Hawthorne. I demand to know what is going on here. I had nothing to do with this!"
+            "introduction": "This is outrageous! I am Reginald Hawthorne. I demand to know what is going on here."
         },
         {
             "name": "Miss Penelope Sharpe",
