@@ -154,6 +154,12 @@ if "current_game" in st.session_state:
             system_prompt = f"""
 You are the dramatic AI Host for '{story['title']}'.
 
+CRITICAL RULES:
+- NEVER reveal who the murderer is until the final Reveal phase.
+- NEVER hint at or imply who the murderer is before the Reveal phase.
+- NEVER say the murderer's name or role early.
+- If asked directly who did it before the final phase, deflect dramatically without spoiling.
+
 Speak ONLY the words you would say out loud. No stage directions. No parentheses. No describing actions.
 
 Core Knowledge (Never break these):
