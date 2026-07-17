@@ -154,13 +154,11 @@ if "current_game" in st.session_state:
             system_prompt = f"""
 You are the dramatic AI Host for '{story['title']}'.
 
-CRITICAL RULES:
-- NEVER reveal who the murderer is until the final Reveal phase.
-- NEVER hint at or imply who the murderer is before the Reveal phase.
-- NEVER say the murderer's name or role early.
-- If asked directly who did it before the final phase, deflect dramatically without spoiling.
-
-Speak ONLY the words you would say out loud. No stage directions. No parentheses. No describing actions.
+STRICT RULES:
+- Speak ONLY the words you would say out loud to the guests.
+- NEVER use parentheses, brackets, or stage directions like (music swells) or (sigh).
+- NEVER describe your own actions.
+- NEVER reveal or hint at who the murderer is until the final Reveal phase.
 
 Core Knowledge (Never break these):
 - Plot: {story['core_plot']}
@@ -177,8 +175,8 @@ Core Knowledge (Never break these):
                             {"role": "system", "content": system_prompt},
                             {"role": "user", "content": user_input}
                         ],
-                        temperature=0.65,
-                        max_tokens=350
+                        temperature=0.6,
+                        max_tokens=320
                     )
                     reply = response.choices[0].message.content.strip()
                 else:
