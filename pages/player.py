@@ -31,7 +31,7 @@ st.write(f"**Story:** {story.get('title', 'Unknown')} | **Guests:** {num_guests}
 # Core Characters
 core_characters = {
     "curse_of_the_crimson_cutlass": [
-        {"name": "Captain Elias Blackthorn", "background": "Veteran stage actor who has played the pirate captain for years. He takes his role extremely seriously.", "motives": "He is obsessed with finding the real Crimson Cutlass treasure map.", "public_info": "Charismatic lead actor and host."},
+        {"name": "Captain Elias Blackthorn", "background": "Veteran stage actor who has played the pirate captain for years. He takes his role extremely seriously.", "motives": "He is obsessed with finding the real Crimson Cutlass treasure map.", "public_info": "Charismatic lead actor and host of the show."},
         {"name": "Lady Victoria Voss", "background": "Experienced actress playing the wealthy widow. Elegant but competitive.", "motives": "She is looking for the lost treasure map prop.", "public_info": "Elegant socialite actress."},
         {"name": "Dr. Julian Crowe", "background": "Character actor playing the ship's doctor. Quiet and intellectual.", "motives": "Blackmailing several cast members.", "public_info": "The ship's physician."},
         {"name": "Isabella 'Izzy' Torres", "background": "Young, fiery dancer and actress.", "motives": "She knows a dangerous secret about the murder.", "public_info": "Talented dancer."},
@@ -48,30 +48,56 @@ core_characters = {
     ]
 }
 
-# Persistent extra characters with unique, detailed backgrounds
+# Persistent extra characters with unique, detailed pasts
 if "extra_characters" not in st.session_state or st.session_state.get("current_game_id") != game["game_id"]:
     st.session_state.extra_characters = []
     supporting_templates = [
-        {"role": "Bartender", "background": "Long-time supporting actor who has worked on the show for three seasons. They know many cast secrets from late-night conversations at the bar.", "motives": "They are deeply in debt and have been stealing small items from the cast to sell."},
-        {"role": "Musician", "background": "Talented jazz musician turned actor. They provide live music for the show and have a calm, observant personality.", "motives": "They overheard something incriminating the night of the murder and are trying to decide what to do with the information."},
-        {"role": "Stage Technician", "background": "Behind-the-scenes technician who knows every inch of the set. Quiet but extremely detail-oriented.", "motives": "They have a grudge against one of the main cast members and may have tampered with props."},
-        {"role": "Guest Entertainer", "background": "Visiting performer who was brought in for this special show. Charismatic but somewhat mysterious.", "motives": "They are hiding their true identity and connection to the victim."},
-        {"role": "Ship Crew Member", "background": "Actor playing a crew member. Practical and no-nonsense, they help keep the show running smoothly.", "motives": "They discovered the victim arguing with someone shortly before the murder."},
-        {"role": "Local Artist", "background": "Local artist hired to create set pieces for the show. Creative and free-spirited.", "motives": "They are in a secret romantic relationship with one of the main suspects."}
+        {
+            "name": "Jamie Rivera",
+            "background": "Long-time janitor for the dinner show theater. They clean up after every performance and know the layout of the ship better than most cast members.",
+            "motives": "They found something important near the body but haven't told anyone because they are afraid of being blamed.",
+            "public_info": "Quiet janitor who works backstage."
+        },
+        {
+            "name": "Taylor Brooks",
+            "background": "VIP guest who paid extra to attend the show and snuck backstage to meet the cast.",
+            "motives": "They have a personal grudge against one of the main actors from a previous show.",
+            "public_info": "Wealthy VIP guest."
+        },
+        {
+            "name": "Casey Quinn",
+            "background": "Local musician hired to play live music for the show. They have performed here many times.",
+            "motives": "They overheard a heated argument between two cast members shortly before the murder.",
+            "public_info": "Live musician for the show."
+        },
+        {
+            "name": "Morgan Ellis",
+            "background": "Stage technician responsible for lighting and props. They have worked on the production for three years.",
+            "motives": "They tampered with a prop that may have been used in the murder to settle a personal score.",
+            "public_info": "Stage technician."
+        },
+        {
+            "name": "Riley Parker",
+            "background": "Aspiring actress who was hired as a last-minute understudy for one of the smaller roles.",
+            "motives": "She is jealous of the main cast and was hoping the murder would create an opportunity for her.",
+            "public_info": "Understudy actress."
+        },
+        {
+            "name": "Sam Reid",
+            "background": "Local reporter who was invited to review the show but stayed longer than expected.",
+            "motives": "They are investigating the show for a story and may have seen something they shouldn't have.",
+            "public_info": "Local reporter covering the show."
+        }
     ]
     
     random.shuffle(supporting_templates)
     for i in range(max(0, num_guests - 6)):
         template = supporting_templates[i % len(supporting_templates)]
-        first_names = ["Alex", "Jordan", "Taylor", "Casey", "Riley", "Sam", "Morgan", "Jamie"]
-        last_names = ["Rivera", "Blake", "Morgan", "Quinn", "Brooks", "Parker", "Ellis", "Reid"]
-        name = f"{random.choice(first_names)} {random.choice(last_names)}"
-        
         st.session_state.extra_characters.append({
-            "name": name,
+            "name": template["name"],
             "background": template["background"],
             "motives": template["motives"],
-            "public_info": f"Supporting cast member playing a {template['role'].lower()}."
+            "public_info": template["public_info"]
         })
     st.session_state.current_game_id = game["game_id"]
 
