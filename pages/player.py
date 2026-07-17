@@ -26,53 +26,53 @@ else:
 
 st.write(f"**Story:** {story.get('title', 'Unknown')}")
 
-# Core Characters with Modern Actor Flavor
+# Core Characters with Tense, In-Character Introductions
 core_characters = {
     "curse_of_the_crimson_cutlass": [
         {
             "name": "Captain Elias Blackthorn",
-            "background": "A veteran stage actor who plays the role of the legendary pirate captain in the dinner show. He brings dramatic energy to every performance and takes his role very seriously.",
-            "motives": "He is desperately searching for the legendary Crimson Cutlass treasure map prop that was supposedly hidden on this ship years ago. He believes finding it will make the show legendary.",
-            "public_info": "Charismatic lead actor and host of the show. Known for his booming voice and commanding stage presence.",
-            "introduction": "Ladies and gentlemen, welcome aboard! I am Captain Elias Blackthorn, master of this fine vessel and your host for this evening's thrilling adventure. Let the show begin!"
+            "background": "A veteran stage actor who plays the role of the legendary pirate captain in the dinner show. He takes his role very seriously and has a commanding presence.",
+            "motives": "He is desperately searching for the legendary Crimson Cutlass treasure map prop. He was the last person to see the victim alive.",
+            "public_info": "Charismatic lead actor and host of the show. Known for his dramatic storytelling.",
+            "introduction": "Ladies and gentlemen... I am Captain Elias Blackthorn. I never imagined our performance would turn into a real tragedy tonight. I was one of the last to see the victim alive."
         },
         {
             "name": "Lady Victoria Voss",
-            "background": "An experienced actress who plays the wealthy widow in the dinner show. She is elegant on stage but can be quite sharp and competitive behind the scenes.",
-            "motives": "She is looking for the lost treasure map prop that she believes her character’s husband hid. She wants to be the star of the show.",
+            "background": "An experienced actress who plays the wealthy widow. She is elegant on stage but can be quite sharp and competitive behind the scenes.",
+            "motives": "She is looking for the lost treasure map prop and had a heated argument with the victim earlier.",
             "public_info": "Elegant and flirtatious actress always dressed in stunning period gowns.",
-            "introduction": "Good evening, everyone. I am Lady Victoria Voss. It is an absolute pleasure to be performing with all of you tonight."
+            "introduction": "Good evening. I am Lady Victoria Voss. This night has taken a dreadful turn. I can hardly believe what has happened."
         },
         {
             "name": "Dr. Julian Crowe",
-            "background": "A character actor who plays the ship's doctor. He is quiet and intellectual on stage, but has a slightly unsettling intensity that makes him memorable.",
-            "motives": "He is blackmailing several other cast members with secrets he discovered during rehearsals.",
-            "public_info": "The ship's doctor in the show, known for his calm demeanor and medical knowledge.",
-            "introduction": "Good evening, everyone. I am Dr. Julian Crowe, the ship's physician. I look forward to an... enlightening evening together."
+            "background": "A character actor who plays the ship's doctor. He is quiet and intellectual with a slightly unsettling intensity.",
+            "motives": "He is blackmailing several cast members and may have supplied something used in the murder.",
+            "public_info": "The ship's doctor in the show, known for his calm demeanor.",
+            "introduction": "Good evening. I am Dr. Julian Crowe. As the ship's physician, I am deeply troubled by what has occurred here tonight."
         },
         {
             "name": "Isabella 'Izzy' Torres",
-            "background": "A young, energetic dancer and actress who plays the fiery dancer role. She is passionate and full of life both on and off stage.",
-            "motives": "She knows a dangerous secret about the plot and is deciding whether to reveal it or use it to steal the spotlight.",
-            "public_info": "Talented dancer known for her fiery personality and captivating performances.",
-            "introduction": "¡Hola everyone! I'm Izzy Torres, the star dancer of this show! Let's make this night unforgettable!"
+            "background": "A young, fiery dancer and actress. She is passionate and outspoken both on and off stage.",
+            "motives": "She knows a dangerous secret about the murder and is deciding whether to reveal it.",
+            "public_info": "Talented dancer known for her fiery personality.",
+            "introduction": "Hi everyone... I'm Izzy Torres. I can't believe this is happening. I saw things I wish I hadn't."
         },
         {
             "name": "Mr. Reginald Hawthorne",
-            "background": "A character actor who plays the wealthy merchant. He is loud, arrogant, and loves to ham it up on stage.",
-            "motives": "He owes large debts in real life and sees this show as a chance to turn his luck around.",
-            "public_info": "Wealthy merchant known for his booming voice and over-the-top personality.",
-            "introduction": "Good evening, ladies and gentlemen! I am Reginald Hawthorne, successful merchant and man of considerable means. A pleasure to meet you all!"
+            "background": "A character actor who plays the wealthy merchant. He is loud and arrogant on stage.",
+            "motives": "He owed the victim money and was arguing with him before the murder.",
+            "public_info": "Wealthy merchant known for his booming voice.",
+            "introduction": "This is outrageous! I am Reginald Hawthorne. I demand to know what is going on here. I had nothing to do with this!"
         },
         {
             "name": "Miss Penelope Sharpe",
-            "background": "A quiet, bookish actress who plays the captain's assistant. She is often overlooked but notices everything.",
-            "motives": "She is secretly in love with one of the other actors and will do anything to protect them.",
-            "public_info": "The captain's loyal assistant, known for her intelligence and quiet nature.",
-            "introduction": "Hello everyone... I'm Penelope Sharpe, assistant to Captain Blackthorn. I hope you all enjoy the show tonight."
+            "background": "A quiet, bookish actress who plays the captain's assistant. She notices everything.",
+            "motives": "She is secretly in love with one of the guests and will do anything to protect them.",
+            "public_info": "The captain's loyal assistant, known for her intelligence.",
+            "introduction": "Hello... I'm Penelope Sharpe. I... I don't know what to say. This is all so horrible."
         }
     ],
-    # Add the other stories when ready
+    # Add other stories as needed
 }
 
 roles = core_characters.get(story_id, [])
