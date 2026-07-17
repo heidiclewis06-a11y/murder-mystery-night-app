@@ -26,7 +26,7 @@ else:
 
 st.write(f"**Story:** {story.get('title', 'Unknown')}")
 
-# Core Characters with Safe, Show-Focused Introductions
+# Core Characters with Tense, Murder-Suspect Introductions
 core_characters = {
     "curse_of_the_crimson_cutlass": [
         {
@@ -34,42 +34,42 @@ core_characters = {
             "background": "A veteran stage actor who plays the role of the legendary pirate captain in the dinner show. He takes his role very seriously and has a commanding presence.",
             "motives": "He is desperately searching for the legendary Crimson Cutlass treasure map prop. He was one of the last to see the victim alive.",
             "public_info": "Charismatic lead actor and host of the show. Known for his dramatic storytelling.",
-            "introduction": "Good evening, everyone. I am Captain Elias Blackthorn, the captain of this ship in our dinner show. I hope you are all enjoying the performance so far."
+            "introduction": "Everyone... I am Captain Elias Blackthorn. I can't believe what has happened tonight. One of us is responsible for this."
         },
         {
             "name": "Lady Victoria Voss",
             "background": "An experienced actress who plays the wealthy widow. She is elegant on stage but can be quite sharp and competitive behind the scenes.",
             "motives": "She is looking for the lost treasure map prop and had a heated argument with the victim earlier.",
             "public_info": "Elegant and flirtatious actress always dressed in stunning period gowns.",
-            "introduction": "Good evening. I am Lady Victoria Voss, the wealthy widow in tonight's show. It's a pleasure to perform for you all."
+            "introduction": "Good evening. I am Lady Victoria Voss. This is a nightmare. I never thought something like this would happen during one of our shows."
         },
         {
             "name": "Dr. Julian Crowe",
             "background": "A character actor who plays the ship's doctor. He is quiet and intellectual with a slightly unsettling intensity.",
             "motives": "He is blackmailing several cast members and may have supplied something used in the murder.",
             "public_info": "The ship's doctor in the show, known for his calm demeanor.",
-            "introduction": "Good evening. I am Dr. Julian Crowe, the ship's physician in our production. I hope everyone is having a pleasant evening."
+            "introduction": "I am Dr. Julian Crowe, the ship's physician in this production. What has happened here tonight is deeply disturbing."
         },
         {
             "name": "Isabella 'Izzy' Torres",
             "background": "A young, fiery dancer and actress. She is passionate and outspoken both on and off stage.",
             "motives": "She knows a dangerous secret about the murder and is deciding whether to reveal it.",
             "public_info": "Talented dancer known for her fiery personality.",
-            "introduction": "Hi everyone! I'm Izzy Torres, the dancer in the show. I hope you're enjoying the performance!"
+            "introduction": "I'm Izzy Torres, the dancer in the show. I still can't believe one of us did this..."
         },
         {
             "name": "Mr. Reginald Hawthorne",
             "background": "A character actor who plays the wealthy merchant. He is loud and arrogant on stage.",
             "motives": "He owed the victim money and was arguing with him before the murder.",
             "public_info": "Wealthy merchant known for his booming voice.",
-            "introduction": "Good evening, ladies and gentlemen. I am Reginald Hawthorne, the wealthy merchant in tonight's show."
+            "introduction": "I am Reginald Hawthorne, the wealthy merchant in tonight's show. This is an outrage. We need to get to the bottom of this immediately."
         },
         {
             "name": "Miss Penelope Sharpe",
             "background": "A quiet, bookish actress who plays the captain's assistant. She notices everything.",
             "motives": "She is secretly in love with one of the guests and will do anything to protect them.",
             "public_info": "The captain's loyal assistant, known for her intelligence.",
-            "introduction": "Hello everyone. I'm Penelope Sharpe, the captain's assistant in the show. I hope you enjoy the performance."
+            "introduction": "I'm Penelope Sharpe, assistant to Captain Blackthorn in the show. I... I don't know what to say about what happened."
         }
     ],
     # Add other stories as needed
