@@ -31,31 +31,47 @@ st.write(f"**Story:** {story.get('title', 'Unknown')} | **Guests:** {num_guests}
 # Core Characters
 core_characters = {
     "curse_of_the_crimson_cutlass": [
-        {"name": "Captain Elias Blackthorn", "background": "A veteran stage actor who plays the pirate captain. He takes his role very seriously.", "motives": "He is obsessed with finding the real Crimson Cutlass treasure map.", "public_info": "Charismatic lead actor and host of the show."},
-        {"name": "Lady Victoria Voss", "background": "An experienced actress playing the wealthy widow. Elegant but competitive.", "motives": "She is looking for the lost treasure map prop.", "public_info": "Elegant socialite actress."},
+        {"name": "Captain Elias Blackthorn", "background": "Veteran stage actor who has played the pirate captain for years. He takes his role extremely seriously.", "motives": "He is obsessed with finding the real Crimson Cutlass treasure map.", "public_info": "Charismatic lead actor and host."},
+        {"name": "Lady Victoria Voss", "background": "Experienced actress playing the wealthy widow. Elegant but competitive.", "motives": "She is looking for the lost treasure map prop.", "public_info": "Elegant socialite actress."},
         {"name": "Dr. Julian Crowe", "background": "Character actor playing the ship's doctor. Quiet and intellectual.", "motives": "Blackmailing several cast members.", "public_info": "The ship's physician."},
         {"name": "Isabella 'Izzy' Torres", "background": "Young, fiery dancer and actress.", "motives": "She knows a dangerous secret about the murder.", "public_info": "Talented dancer."},
         {"name": "Mr. Reginald Hawthorne", "background": "Actor playing the wealthy merchant. Loud and arrogant.", "motives": "He owes large debts.", "public_info": "Boastful merchant."},
         {"name": "Miss Penelope Sharpe", "background": "Quiet actress playing the captain's assistant.", "motives": "Secretly in love with one of the guests.", "public_info": "Bookish assistant."}
     ],
-    # Add other stories as needed
+    "death_on_the_azure_empress": [
+        {"name": "Captain Marcus Hale", "background": "Seasoned actor playing the ship captain.", "motives": "Hiding illegal cargo.", "public_info": "Authoritative leader."},
+        {"name": "Sophia Laurent", "background": "Famous actress playing the star passenger.", "motives": "Running from a scandal.", "public_info": "Glamorous performer."},
+        {"name": "Dr. Elena Vargas", "background": "Actress playing the chief medical officer.", "motives": "Involved in experimental drugs.", "public_info": "Professional doctor."},
+        {"name": "Victor Kane", "background": "Actor playing the billionaire businessman.", "motives": "Corporate espionage.", "public_info": "Arrogant businessman."},
+        {"name": "Mia Chen", "background": "Young actress playing the influencer.", "motives": "Blackmailing guests.", "public_info": "Outgoing social media star."},
+        {"name": "Thomas Blackwell", "background": "Actor playing the retired detective.", "motives": "Investigating a cold case.", "public_info": "Observant and quiet."}
+    ]
 }
 
-# Persistent extra characters (generated once per game)
+# Persistent extra characters with unique, detailed backgrounds
 if "extra_characters" not in st.session_state or st.session_state.get("current_game_id") != game["game_id"]:
     st.session_state.extra_characters = []
-    first_names = ["Alex", "Jordan", "Taylor", "Casey", "Riley", "Sam", "Morgan", "Jamie"]
-    last_names = ["Rivera", "Blake", "Morgan", "Quinn", "Brooks", "Parker", "Ellis", "Reid"]
-    roles = ["Bartender", "Musician", "Waitstaff", "Stage Technician", "Guest Entertainer", "Ship Crew Member"]
+    supporting_templates = [
+        {"role": "Bartender", "background": "Long-time supporting actor who has worked on the show for three seasons. They know many cast secrets from late-night conversations at the bar.", "motives": "They are deeply in debt and have been stealing small items from the cast to sell."},
+        {"role": "Musician", "background": "Talented jazz musician turned actor. They provide live music for the show and have a calm, observant personality.", "motives": "They overheard something incriminating the night of the murder and are trying to decide what to do with the information."},
+        {"role": "Stage Technician", "background": "Behind-the-scenes technician who knows every inch of the set. Quiet but extremely detail-oriented.", "motives": "They have a grudge against one of the main cast members and may have tampered with props."},
+        {"role": "Guest Entertainer", "background": "Visiting performer who was brought in for this special show. Charismatic but somewhat mysterious.", "motives": "They are hiding their true identity and connection to the victim."},
+        {"role": "Ship Crew Member", "background": "Actor playing a crew member. Practical and no-nonsense, they help keep the show running smoothly.", "motives": "They discovered the victim arguing with someone shortly before the murder."},
+        {"role": "Local Artist", "background": "Local artist hired to create set pieces for the show. Creative and free-spirited.", "motives": "They are in a secret romantic relationship with one of the main suspects."}
+    ]
     
+    random.shuffle(supporting_templates)
     for i in range(max(0, num_guests - 6)):
+        template = supporting_templates[i % len(supporting_templates)]
+        first_names = ["Alex", "Jordan", "Taylor", "Casey", "Riley", "Sam", "Morgan", "Jamie"]
+        last_names = ["Rivera", "Blake", "Morgan", "Quinn", "Brooks", "Parker", "Ellis", "Reid"]
         name = f"{random.choice(first_names)} {random.choice(last_names)}"
-        role = random.choice(roles)
+        
         st.session_state.extra_characters.append({
             "name": name,
-            "background": f"An experienced supporting actor who has been with the production for several seasons playing a {role.lower()}. They know many behind-the-scenes secrets.",
-            "motives": f"They have a complicated personal history with several members of the main cast and are hiding a significant secret of their own.",
-            "public_info": f"Supporting cast member playing a {role}."
+            "background": template["background"],
+            "motives": template["motives"],
+            "public_info": f"Supporting cast member playing a {template['role'].lower()}."
         })
     st.session_state.current_game_id = game["game_id"]
 
