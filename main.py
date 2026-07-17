@@ -16,7 +16,7 @@ client = Groq(api_key=groq_key) if groq_key else None
 st.set_page_config(page_title="Mystery Night AI", page_icon="🔍", layout="wide")
 
 st.title("🔍 Mystery Night AI")
-st.subheader("Live Groq AI Host with Voice & Avatars")
+st.subheader("Live Groq AI Host with Character Packets")
 
 # Load stories
 @st.cache_data
@@ -58,7 +58,8 @@ with st.sidebar:
                 "game_id": datetime.now().strftime("%Y%m%d_%H%M%S"),
                 "story_id": story_id,
                 "num_guests": num_guests,
-                "murderer_role": murderer_role
+                "murderer_role": murderer_role,
+                "assigned_roles": {}
             }
             if "host_messages" not in st.session_state:
                 st.session_state.host_messages = []
@@ -69,145 +70,143 @@ if "current_game" in st.session_state:
     game = st.session_state.current_game
     story = stories[game["story_id"]]
     
-    st.title(f"🎤 AI Host - {story['title']}")
-    
-    # Story-Specific Avatar
-    if "crimson" in story["story_id"]:
-        avatar = "🏴‍☠️"
-        caption = "Pirate Captain"
-        rate = 0.95
-        pitch = 1.1
-    elif "azure" in story["story_id"]:
-        avatar = "🚢"
-        caption = "Cruise Ship Captain"
-        rate = 1.0
-        pitch = 0.95
-    elif "gallery" in story["story_id"]:
-        avatar = "🖼️"
-        caption = "Art Gallery Host"
-        rate = 0.9
-        pitch = 1.2
-    elif "smoke" in story["story_id"]:
-        avatar = "🚬"
-        caption = "1920s Speakeasy Host"
-        rate = 1.05
-        pitch = 0.9
-    else:
-        avatar = "🕵️"
-        caption = "AI Host"
-        rate = 1.0
-        pitch = 1.0
+    tab1, tab2 = st.tabs(["🎤 AI Host", "📜 Character Packets"])
 
-    st.markdown(f"""
-    <div style="text-align: center; font-size: 110px; margin: 20px 0; animation: speak 0.5s infinite alternate;">
-        {avatar}
-    </div>
-    """, unsafe_allow_html=True)
-    st.caption(caption)
-
-    # Auto-play Opening
-    if len(st.session_state.get("host_messages", [])) == 0:
-        opening = f"Welcome everyone to {story['title']}! I am your AI Host for this evening's thrilling murder mystery. Gather around, dim the lights, and let the investigation begin!"
-        st.session_state.host_messages.append({"role": "host", "content": opening})
+    with tab1:
+        st.title(f"🎤 AI Host - {story['title']}")
         
-        clean_opening = re.sub(r'\(.*?\)', '', opening).strip()
-        st.components.v1.html(f"""
-        <script>
-            var utterance = new SpeechSynthesisUtterance("{clean_opening.replace('"', '\\"')}");
-            utterance.rate = {rate};
-            utterance.pitch = {pitch};
-            speechSynthesis.speak(utterance);
-        </script>
-        """, height=0)
-
-    # Display messages
-    for i, msg in enumerate(st.session_state.host_messages):
-        if msg["role"] == "host":
-            clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()
-            clean_text = re.sub(r'\[.*?\]', '', clean_text).strip()
-            st.markdown(f"**🗣️ AI Host:** {msg['content']}")
-            if st.button(f"🔊 Speak", key=f"voice_{i}"):
-                try:
-                    st.components.v1.html(f"""
-                    <script>
-                        var utterance = new SpeechSynthesisUtterance("{clean_text.replace('"', '\\"')}");
-                        utterance.rate = {rate};
-                        utterance.pitch = {pitch};
-                        speechSynthesis.speak(utterance);
-                    </script>
-                    """, height=0)
-                    st.success("🔊 Speaking...")
-                except:
-                    st.warning("Voice playback failed.")
+        # Avatar (same as before)
+        if "crimson" in story["story_id"]:
+            avatar = "🏴‍☠️"
+            caption = "Pirate Captain"
+            rate = 0.95
+            pitch = 1.1
+        elif "azure" in story["story_id"]:
+            avatar = "🚢"
+            caption = "Cruise Ship Captain"
+            rate = 1.0
+            pitch = 0.95
+        elif "gallery" in story["story_id"]:
+            avatar = "🖼️"
+            caption = "Art Gallery Host"
+            rate = 0.9
+            pitch = 1.2
+        elif "smoke" in story["story_id"]:
+            avatar = "🚬"
+            caption = "1920s Speakeasy Host"
+            rate = 1.05
+            pitch = 0.9
         else:
-            st.markdown(f"**Guest:** {msg['content']}")
+            avatar = "🕵️"
+            caption = "AI Host"
+            rate = 1.0
+            pitch = 1.0
 
-    # User input
-    user_input = st.text_input("What should the AI Host say or answer?", 
-                              placeholder="Reveal next clue, answer a question, or give instructions...", 
-                              key="user_input")
+        st.markdown(f"""
+        <div style="text-align: center; font-size: 110px; margin: 20px 0; animation: speak 0.5s infinite alternate;">
+            {avatar}
+        </div>
+        """, unsafe_allow_html=True)
+        st.caption(caption)
 
-    if st.button("Send to AI Host", type="primary", key="send_btn"):
-        if user_input:
-            st.session_state.host_messages.append({"role": "player", "content": user_input})
+        # Auto-play Opening
+        if len(st.session_state.get("host_messages", [])) == 0:
+            opening = f"Welcome everyone to {story['title']}! I am your AI Host for this evening's thrilling murder mystery. Gather around, dim the lights, and let the investigation begin!"
+            st.session_state.host_messages.append({"role": "host", "content": opening})
             
-            system_prompt = f"""
+            clean_opening = re.sub(r'\(.*?\)', '', opening).strip()
+            st.components.v1.html(f"""
+            <script>
+                var utterance = new SpeechSynthesisUtterance("{clean_opening.replace('"', '\\"')}");
+                utterance.rate = {rate};
+                utterance.pitch = {pitch};
+                speechSynthesis.speak(utterance);
+            </script>
+            """, height=0)
+
+        # Display messages
+        for i, msg in enumerate(st.session_state.host_messages):
+            if msg["role"] == "host":
+                clean_text = re.sub(r'\(.*?\)', '', msg['content']).strip()
+                st.markdown(f"**🗣️ AI Host:** {msg['content']}")
+                if st.button(f"🔊 Speak", key=f"voice_{i}"):
+                    try:
+                        st.components.v1.html(f"""
+                        <script>
+                            var utterance = new SpeechSynthesisUtterance("{clean_text.replace('"', '\\"')}");
+                            utterance.rate = {rate};
+                            utterance.pitch = {pitch};
+                            speechSynthesis.speak(utterance);
+                        </script>
+                        """, height=0)
+                        st.success("🔊 Speaking...")
+                    except:
+                        st.warning("Voice playback failed.")
+            else:
+                st.markdown(f"**Guest:** {msg['content']}")
+
+        user_input = st.text_input("What should the AI Host say or answer?", 
+                                  placeholder="Reveal next clue, answer a question, or give instructions...", 
+                                  key="user_input")
+
+        if st.button("Send to AI Host", type="primary", key="send_btn"):
+            if user_input:
+                st.session_state.host_messages.append({"role": "player", "content": user_input})
+                
+                system_prompt = f"""
 You are the dramatic AI Host for '{story['title']}'.
 
 STRICT RULES:
-- Speak ONLY the words you would say out loud to the guests.
-- NEVER use parentheses, brackets, or stage directions like (music swells) or (sigh).
-- NEVER describe your own actions.
-- NEVER reveal or hint at who the murderer is until the final Reveal phase.
+- Speak ONLY the words you would say out loud.
+- NEVER use parentheses or stage directions.
+- NEVER reveal who the murderer is until the final Reveal phase.
 
-Core Knowledge (Never break these):
+Core Knowledge:
 - Plot: {story['core_plot']}
 - Victim: {story['victim']}
 - Clues: {[c['clue_text'] for c in story['clues']]}
 - Twist: {story['twist_ending']}
 """
 
-            try:
-                if client:
-                    response = client.chat.completions.create(
-                        model="llama-3.1-8b-instant",
-                        messages=[
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": user_input}
-                        ],
-                        temperature=0.6,
-                        max_tokens=320
-                    )
-                    reply = response.choices[0].message.content.strip()
-                else:
+                try:
+                    if client:
+                        response = client.chat.completions.create(
+                            model="llama-3.1-8b-instant",
+                            messages=[
+                                {"role": "system", "content": system_prompt},
+                                {"role": "user", "content": user_input}
+                            ],
+                            temperature=0.65,
+                            max_tokens=350
+                        )
+                        reply = response.choices[0].message.content.strip()
+                    else:
+                        reply = "The spirits are a bit foggy tonight..."
+                except:
                     reply = "The spirits are a bit foggy tonight..."
-            except:
-                reply = "The spirits are a bit foggy tonight..."
 
-            st.session_state.host_messages.append({"role": "host", "content": reply})
-            st.rerun()
-
-    # Phase Control
-    st.divider()
-    st.subheader("Phase Control")
-    if "current_act" not in st.session_state:
-        st.session_state.current_act = 0
-    acts = ["Introduction", "Act 1", "Act 2", "Act 3", "Accusations", "Reveal"]
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("← Previous Phase"):
-            if st.session_state.current_act > 0:
-                st.session_state.current_act -= 1
-                st.rerun()
-    with col2:
-        if st.button("Next Phase →", type="primary"):
-            if st.session_state.current_act < len(acts)-1:
-                st.session_state.current_act += 1
+                st.session_state.host_messages.append({"role": "host", "content": reply})
                 st.rerun()
 
-    st.write(f"**Current Phase:** {acts[st.session_state.current_act]}")
+    with tab2:
+        st.header("📜 Character Packets")
+        st.info("Players can use this tab to view their character information and questions.")
+
+        # Placeholder for character packets (you can expand this later)
+        st.subheader("Your Character Packet")
+        st.write("**Character Name:** [Your Role]")
+        st.write("**Background:** [Full background here]")
+        st.write("**Motives & Secrets:** [Details]")
+
+        st.subheader("Questions to Ask")
+        if st.session_state.get("current_act") is not None:
+            act_name = ["Introduction", "Act 1", "Act 2", "Act 3", "Accusations", "Reveal"][st.session_state.current_act]
+            st.write(f"**{act_name} Questions:**")
+            st.write("- Question 1 to ask...")
+            st.write("- Question 2 to ask...")
+            st.write("- Question 3 to ask...")
 
 else:
     st.info("👈 Use the sidebar to select a story and generate a game to begin.")
 
-st.caption("Mystery Night AI - Groq + Browser Voice")
+st.caption("Mystery Night AI")
