@@ -154,11 +154,7 @@ if "current_game" in st.session_state:
             system_prompt = f"""
 You are the dramatic AI Host for '{story['title']}'.
 
-IMPORTANT RULES:
-- Speak ONLY the words you would say out loud.
-- NEVER use parentheses, brackets, or stage directions like (Dramatic music...) or (sigh).
-- NEVER describe your own actions.
-- Be theatrical but speak directly to the guests.
+Speak ONLY the words you would say out loud. No stage directions. No parentheses. No describing actions.
 
 Core Knowledge (Never break these):
 - Plot: {story['core_plot']}
@@ -175,7 +171,7 @@ Core Knowledge (Never break these):
                             {"role": "system", "content": system_prompt},
                             {"role": "user", "content": user_input}
                         ],
-                        temperature=0.6,
+                        temperature=0.65,
                         max_tokens=350
                     )
                     reply = response.choices[0].message.content.strip()
