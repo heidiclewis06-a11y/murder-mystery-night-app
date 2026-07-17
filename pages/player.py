@@ -26,53 +26,53 @@ else:
 
 st.write(f"**Story:** {story.get('title', 'Unknown')}")
 
-# Core Characters with Rich Details and Unique Voices
+# Core Characters with Modern Actor Flavor
 core_characters = {
     "curse_of_the_crimson_cutlass": [
         {
             "name": "Captain Elias Blackthorn",
-            "background": "A legendary retired pirate captain who now runs the Crimson Cutlass Dinner Show. He is known for his booming voice, theatrical flair, and a mysterious scar across his left eye from a long-ago duel.",
-            "motives": "He is desperately searching for the legendary Crimson Cutlass treasure map that was supposedly hidden on this very ship years ago. He believes it will restore his lost fortune.",
-            "public_info": "Charismatic leader of the show, famous for his dramatic storytelling and commanding presence. Everyone knows he was once a real pirate captain.",
-            "introduction": "Ahoy there, me hearties! I be Captain Elias Blackthorn, master of this fine vessel and your host for this evening's grand adventure on the high seas! Gather 'round and let the tales begin!"
+            "background": "A veteran stage actor who plays the role of the legendary pirate captain in the dinner show. He brings dramatic energy to every performance and takes his role very seriously.",
+            "motives": "He is desperately searching for the legendary Crimson Cutlass treasure map prop that was supposedly hidden on this ship years ago. He believes finding it will make the show legendary.",
+            "public_info": "Charismatic lead actor and host of the show. Known for his booming voice and commanding stage presence.",
+            "introduction": "Ladies and gentlemen, welcome aboard! I am Captain Elias Blackthorn, master of this fine vessel and your host for this evening's thrilling adventure. Let the show begin!"
         },
         {
             "name": "Lady Victoria Voss",
-            "background": "A wealthy and elegant widow in her mid-40s who frequently attends high-society events. She carries herself with grace but has a sharp tongue when provoked.",
-            "motives": "She is looking for her late husband's lost treasure map, which she believes is connected to this ship. She will stop at nothing to find it.",
-            "public_info": "Elegant, flirtatious socialite always dressed in the finest gowns and jewels.",
-            "introduction": "Good evening, my darlings. I am Lady Victoria Voss, widow of the late Lord Voss. It is simply delightful to be among such distinguished company tonight."
+            "background": "An experienced actress who plays the wealthy widow in the dinner show. She is elegant on stage but can be quite sharp and competitive behind the scenes.",
+            "motives": "She is looking for the lost treasure map prop that she believes her character’s husband hid. She wants to be the star of the show.",
+            "public_info": "Elegant and flirtatious actress always dressed in stunning period gowns.",
+            "introduction": "Good evening, everyone. I am Lady Victoria Voss. It is an absolute pleasure to be performing with all of you tonight."
         },
         {
             "name": "Dr. Julian Crowe",
-            "background": "The ship's doctor turned performer. A quiet, intellectual man in his 50s with a slightly unsettling smile and sharp eyes that miss nothing.",
-            "motives": "He is blackmailing several guests on board with secrets he discovered during medical examinations.",
-            "public_info": "The ship's physician, known for his calm demeanor and extensive knowledge of medicines and poisons.",
-            "introduction": "Good evening, everyone. I am Dr. Julian Crowe, the ship's physician. I do hope this night proves to be... enlightening for us all."
+            "background": "A character actor who plays the ship's doctor. He is quiet and intellectual on stage, but has a slightly unsettling intensity that makes him memorable.",
+            "motives": "He is blackmailing several other cast members with secrets he discovered during rehearsals.",
+            "public_info": "The ship's doctor in the show, known for his calm demeanor and medical knowledge.",
+            "introduction": "Good evening, everyone. I am Dr. Julian Crowe, the ship's physician. I look forward to an... enlightening evening together."
         },
         {
             "name": "Isabella 'Izzy' Torres",
-            "background": "A young, fiery dancer in the dinner show. She is passionate, outspoken, and full of energy, often the center of attention.",
-            "motives": "She knows a dangerous secret about the murder and is trying to decide whether to reveal it or use it to her advantage.",
+            "background": "A young, energetic dancer and actress who plays the fiery dancer role. She is passionate and full of life both on and off stage.",
+            "motives": "She knows a dangerous secret about the plot and is deciding whether to reveal it or use it to steal the spotlight.",
             "public_info": "Talented dancer known for her fiery personality and captivating performances.",
-            "introduction": "¡Hola everyone! I'm Izzy Torres, the star dancer of this show! Let's make this night one to remember, sí?"
+            "introduction": "¡Hola everyone! I'm Izzy Torres, the star dancer of this show! Let's make this night unforgettable!"
         },
         {
             "name": "Mr. Reginald Hawthorne",
-            "background": "A rich merchant with shady business dealings. Loud, arrogant, and always boasting about his wealth and connections.",
-            "motives": "He owes large debts to multiple people and is desperate to find a way out of his financial troubles.",
-            "public_info": "Wealthy merchant known for his booming voice and expensive taste.",
-            "introduction": "Good evening, ladies and gentlemen! I am Reginald Hawthorne, successful merchant and man of considerable means. A pleasure to make your acquaintance!"
+            "background": "A character actor who plays the wealthy merchant. He is loud, arrogant, and loves to ham it up on stage.",
+            "motives": "He owes large debts in real life and sees this show as a chance to turn his luck around.",
+            "public_info": "Wealthy merchant known for his booming voice and over-the-top personality.",
+            "introduction": "Good evening, ladies and gentlemen! I am Reginald Hawthorne, successful merchant and man of considerable means. A pleasure to meet you all!"
         },
         {
             "name": "Miss Penelope Sharpe",
-            "background": "The captain's quiet and bookish assistant. She is always watching and listening, often overlooked by others.",
-            "motives": "She is secretly in love with one of the guests and will do anything to protect them.",
+            "background": "A quiet, bookish actress who plays the captain's assistant. She is often overlooked but notices everything.",
+            "motives": "She is secretly in love with one of the other actors and will do anything to protect them.",
             "public_info": "The captain's loyal assistant, known for her intelligence and quiet nature.",
             "introduction": "Hello everyone... I'm Penelope Sharpe, assistant to Captain Blackthorn. I hope you all enjoy the show tonight."
         }
     ],
-    # Add other stories here if needed
+    # Add the other stories when ready
 }
 
 roles = core_characters.get(story_id, [])
@@ -105,7 +105,7 @@ if selected_role:
     if current_act == 0:
         st.subheader("Introduction Statement (Say this to the group)")
         st.info(selected_role.get("introduction", "Introduce yourself to the group."))
-    
+
     # Questions (hidden during Introduction)
     if current_act > 0:
         st.subheader("Questions to Ask")
