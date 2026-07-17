@@ -31,48 +31,45 @@ st.write(f"**Story:** {story.get('title', 'Unknown')} | **Guests:** {num_guests}
 # Core 6 Characters
 core_characters = {
     "curse_of_the_crimson_cutlass": [
-        {"name": "Captain Elias Blackthorn", "background": "Veteran stage actor playing the pirate captain. Commanding presence.", "motives": "Searching for the treasure map prop.", "public_info": "Lead actor and host of the show."},
-        {"name": "Lady Victoria Voss", "background": "Experienced actress playing the wealthy widow.", "motives": "Looking for the lost map.", "public_info": "Elegant socialite."},
-        {"name": "Dr. Julian Crowe", "background": "Character actor playing the ship's doctor.", "motives": "Blackmailing cast members.", "public_info": "Calm physician."},
-        {"name": "Isabella 'Izzy' Torres", "background": "Young dancer and actress.", "motives": "Knows a dangerous secret.", "public_info": "Fiery performer."},
-        {"name": "Mr. Reginald Hawthorne", "background": "Actor playing the wealthy merchant.", "motives": "Owes large debts.", "public_info": "Loud and arrogant."},
-        {"name": "Miss Penelope Sharpe", "background": "Quiet actress playing the captain's assistant.", "motives": "Secretly in love with a guest.", "public_info": "Bookish and observant."}
+        {"name": "Captain Elias Blackthorn", "background": "A veteran stage actor who has played the pirate captain for years. He takes his role extremely seriously and has become somewhat consumed by the character.", "motives": "He is obsessed with finding the real Crimson Cutlass treasure map that he believes is hidden somewhere on the ship.", "public_info": "Charismatic lead actor and host of the show."},
+        {"name": "Lady Victoria Voss", "background": "An experienced actress known for playing wealthy widows. She has a refined presence but a sharp, competitive edge when it comes to getting the best roles.", "motives": "She is convinced the lost treasure map belongs to her character's family and will do anything to claim it.", "public_info": "Elegant and flirtatious actress always in stunning gowns."},
+        {"name": "Dr. Julian Crowe", "background": "A quiet, intellectual character actor who has specialized in mysterious doctor roles for over a decade.", "motives": "He has been blackmailing several cast members with secrets he uncovered during late-night rehearsals.", "public_info": "The ship's doctor in the show, known for his calm and slightly unsettling demeanor."},
+        {"name": "Isabella 'Izzy' Torres", "background": "A passionate young dancer and actress who brings high energy to every performance.", "motives": "She accidentally discovered a dangerous secret about the murder and is torn about what to do with it.", "public_info": "Fiery and charismatic dancer."},
+        {"name": "Mr. Reginald Hawthorne", "background": "A loud, boastful character actor who loves playing wealthy, arrogant roles.", "motives": "He is deeply in debt and was arguing with the victim about money before the murder.", "public_info": "Wealthy merchant known for his booming voice and over-the-top personality."},
+        {"name": "Miss Penelope Sharpe", "background": "A quiet, observant actress who often plays supporting roles. She notices details others miss.", "motives": "She is secretly in love with one of the other actors and will protect them at all costs.", "public_info": "The captain's loyal assistant, known for her intelligence."}
     ],
     "death_on_the_azure_empress": [
-        {"name": "Captain Marcus Hale", "background": "Actor playing the ship captain.", "motives": "Hiding illegal cargo.", "public_info": "Authoritative leader."},
-        {"name": "Sophia Laurent", "background": "Actress playing the famous star.", "motives": "Running from a scandal.", "public_info": "Glamorous performer."},
-        {"name": "Dr. Elena Vargas", "background": "Actress playing the chief medical officer.", "motives": "Involved in experimental drugs.", "public_info": "Professional doctor."},
-        {"name": "Victor Kane", "background": "Actor playing the billionaire.", "motives": "Corporate espionage.", "public_info": "Arrogant businessman."},
-        {"name": "Mia Chen", "background": "Young actress playing the influencer.", "motives": "Blackmailing guests.", "public_info": "Outgoing social media star."},
-        {"name": "Thomas Blackwell", "background": "Actor playing the retired detective.", "motives": "Investigating a cold case.", "public_info": "Observant and quiet."}
+        {"name": "Captain Marcus Hale", "background": "A seasoned actor who has played ship captains for years. He brings natural authority to the role.", "motives": "He is hiding illegal cargo on the ship to make extra money.", "public_info": "Authoritative and charming captain of the cruise ship."},
+        # ... (add more if needed)
     ]
-    # Add other stories as needed
 }
 
+# Generate realistic additional characters
+def generate_extra_character(index):
+    first_names = ["Alex", "Jordan", "Taylor", "Casey", "Riley", "Sam", "Morgan", "Jamie"]
+    last_names = ["Rivera", "Blake", "Morgan", "Quinn", "Brooks", "Parker", "Ellis", "Reid"]
+    roles = ["Bartender", "Musician", "Waitstaff", "Stage Technician", "Guest Entertainer", "Ship Crew Member", "Local Artist", "Journalist"]
+    
+    name = f"{random.choice(first_names)} {random.choice(last_names)}"
+    role = random.choice(roles)
+    
+    return {
+        "name": name,
+        "background": f"An experienced supporting actor who plays a {role.lower()} in the show. They have been part of the production for several seasons and know many behind-the-scenes secrets.",
+        "motives": f"They have a complicated history with several members of the main cast and are hiding a significant personal secret.",
+        "public_info": f"Supporting cast member playing a {role}."
+    }
+
+# Combine core + extra characters
 roles = core_characters.get(story_id, [])
-if not roles:
-    st.error("Core characters not defined for this story yet.")
-    st.stop()
+extra_count = max(0, num_guests - len(roles))
+for i in range(extra_count):
+    roles.append(generate_extra_character(i))
 
-# Generate additional characters if needed
-extra_characters = []
-if num_guests > len(roles):
-    extra_names = ["Alex Rivera", "Jordan Blake", "Taylor Morgan", "Casey Quinn", "Riley Brooks", "Sam Parker"]
-    extra_roles = ["Waiter", "Bartender", "Stagehand", "Musician", "Guest", "Crew Member"]
-    for i in range(num_guests - len(roles)):
-        extra_characters.append({
-            "name": extra_names[i % len(extra_names)],
-            "background": f"Supporting actor playing a {extra_roles[i % len(extra_roles)]} in the show.",
-            "motives": "Has their own secrets and connections to the main cast.",
-            "public_info": "Supporting cast member."
-        })
-
-all_roles = roles + extra_characters
-
-role_names = [role["name"] for role in all_roles]
+role_names = [role["name"] for role in roles]
 selected_role_name = st.selectbox("Select Your Character", options=role_names, key="selected_role")
 
-selected_role = next((role for role in all_roles if role["name"] == selected_role_name), None)
+selected_role = next((role for role in roles if role["name"] == selected_role_name), None)
 
 if selected_role:
     st.divider()
