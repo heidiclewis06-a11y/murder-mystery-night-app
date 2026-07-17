@@ -26,25 +26,85 @@ else:
 
 st.write(f"**Story:** {story.get('title', 'Unknown')}")
 
-# Full Core 6 Characters for All Stories with Evidence Ties
+# Core Characters with Rich Details
 core_characters = {
     "curse_of_the_crimson_cutlass": [
-        {"name": "Captain Elias Blackthorn", "background": "Legendary retired pirate captain who runs the dinner show. He has a scar across his left eye from a duel and a commanding presence.", "motives": "Desperately searching for the lost Crimson Cutlass treasure. He was the last person to see the victim alive.", "public_info": "Charismatic host of the show. Everyone knows he was a real pirate captain.", "evidence_tie": "His pirate sword was found near the body."},
-        {"name": "Lady Victoria Voss", "background": "Wealthy widow known for her elegance and sharp tongue.", "motives": "Looking for her husband's lost treasure map. She argued with the victim earlier that evening.", "public_info": "Elegant socialite always dressed in fine gowns.", "evidence_tie": "Her monogrammed handkerchief was found with the victim."},
-        {"name": "Dr. Julian Crowe", "background": "Ship's doctor turned performer. Quiet and observant with a slightly unsettling smile.", "motives": "Blackmailing several guests. He supplied the poison used in the murder.", "public_info": "The ship's physician, knowledgeable about medicines and poisons.", "evidence_tie": "His medical bag was found open near the crime scene."},
-        {"name": "Isabella 'Izzy' Torres", "background": "Young, fiery dancer in the show. Passionate and outspoken.", "motives": "Knows a dangerous secret about the murder and is deciding whether to reveal it.", "public_info": "Talented dancer known for her energy and charisma.", "evidence_tie": "Her red dance scarf was found clutched in the victim's hand."},
-        {"name": "Mr. Reginald Hawthorne", "background": "Rich merchant with shady business dealings. Loud and arrogant.", "motives": "Owes large debts and was arguing with the victim about money.", "public_info": "Wealthy merchant known for his boasting.", "evidence_tie": "His engraved pocket watch was found at the scene."},
-        {"name": "Miss Penelope Sharpe", "background": "Quiet, bookish assistant to the captain. Always watching and listening.", "motives": "Secretly in love with one of the guests and will do anything to protect them.", "public_info": "The captain's loyal assistant, known for her intelligence.", "evidence_tie": "Her ink-stained notebook was found near the body."}
+        {
+            "name": "Captain Elias Blackthorn",
+            "background": "A legendary retired pirate captain who now runs the Crimson Cutlass Dinner Show. He is known for his booming voice, theatrical flair, and a mysterious scar across his left eye from a long-ago duel. He commands respect from the crew and guests alike.",
+            "motives": "He is desperately searching for the legendary Crimson Cutlass treasure map that was supposedly hidden on this very ship years ago. He believes it will restore his lost fortune.",
+            "public_info": "Charismatic leader of the show, famous for his dramatic storytelling and commanding presence. Everyone knows he was once a real pirate captain."
+        },
+        {
+            "name": "Lady Victoria Voss",
+            "background": "A wealthy and elegant widow in her mid-40s who frequently attends high-society events. She carries herself with grace but has a sharp tongue when provoked. She travels with a fortune in jewels.",
+            "motives": "She is looking for her late husband's lost treasure map, which she believes is connected to this ship. She will stop at nothing to find it.",
+            "public_info": "Elegant, flirtatious socialite always dressed in the finest gowns and jewels."
+        },
+        {
+            "name": "Dr. Julian Crowe",
+            "background": "The ship's doctor turned performer. A quiet, intellectual man in his 50s with a slightly unsettling smile and sharp eyes that miss nothing.",
+            "motives": "He is blackmailing several guests on board with secrets he discovered during medical examinations.",
+            "public_info": "The ship's physician, known for his calm demeanor and extensive knowledge of medicines and poisons."
+        },
+        {
+            "name": "Isabella 'Izzy' Torres",
+            "background": "A young, fiery dancer in the dinner show. She is passionate, outspoken, and full of energy, often the center of attention.",
+            "motives": "She knows a dangerous secret about the murder and is trying to decide whether to reveal it or use it to her advantage.",
+            "public_info": "Talented dancer known for her fiery personality and captivating performances."
+        },
+        {
+            "name": "Mr. Reginald Hawthorne",
+            "background": "A rich merchant with shady business dealings. Loud, arrogant, and always boasting about his wealth and connections.",
+            "motives": "He owes large debts to multiple people and is desperate to find a way out of his financial troubles.",
+            "public_info": "Wealthy merchant known for his booming voice and expensive taste."
+        },
+        {
+            "name": "Miss Penelope Sharpe",
+            "background": "The captain's quiet and bookish assistant. She is always watching and listening, often overlooked by others.",
+            "motives": "She is secretly in love with one of the guests and will do anything to protect them.",
+            "public_info": "The captain's loyal assistant, known for her intelligence and quiet nature."
+        }
     ],
     "death_on_the_azure_empress": [
-        {"name": "Captain Marcus Hale", "background": "Experienced captain of the luxury cruise ship.", "motives": "Hiding illegal cargo. He was the last to see the victim.", "public_info": "Charming and authoritative leader of the ship.", "evidence_tie": "His captain's hat was found near the body."},
-        {"name": "Sophia Laurent", "background": "Famous actress on vacation.", "motives": "Running from a scandal and had a public argument with the victim.", "public_info": "Glamorous and dramatic star.", "evidence_tie": "Her lipstick-stained glass was found at the crime scene."},
-        {"name": "Dr. Elena Vargas", "background": "Ship's chief medical officer.", "motives": "Involved in experimental drugs that may have been used in the murder.", "public_info": "Professional and calm.", "evidence_tie": "Her medical kit was found open near the victim."},
-        {"name": "Victor Kane", "background": "Billionaire businessman.", "motives": "Involved in corporate espionage and owed the victim money.", "public_info": "Arrogant and powerful.", "evidence_tie": "His monogrammed cufflinks were found at the scene."},
-        {"name": "Mia Chen", "background": "Young social media influencer.", "motives": "Blackmailing guests for content.", "public_info": "Outgoing and always filming.", "evidence_tie": "Her phone was found recording near the body."},
-        {"name": "Thomas Blackwell", "background": "Retired detective on the cruise.", "motives": "Investigating a cold case connected to the victim.", "public_info": "Observant and quiet.", "evidence_tie": "His detective notebook was found near the victim."}
+        {
+            "name": "Captain Marcus Hale",
+            "background": "Experienced captain of the luxury cruise ship the Azure Empress. He has sailed these waters for over 20 years.",
+            "motives": "He is hiding illegal cargo on board and was the last person to see the victim alive.",
+            "public_info": "Charming and authoritative leader of the ship."
+        },
+        {
+            "name": "Sophia Laurent",
+            "background": "Famous actress on vacation. Known for her beauty and dramatic personality.",
+            "motives": "She is running from a major scandal and had a public argument with the victim.",
+            "public_info": "Glamorous and dramatic star."
+        },
+        {
+            "name": "Dr. Elena Vargas",
+            "background": "Ship's chief medical officer. Highly respected but has a secretive side.",
+            "motives": "Involved in experimental drugs that may have been used in the murder.",
+            "public_info": "Professional and calm."
+        },
+        {
+            "name": "Victor Kane",
+            "background": "Billionaire businessman known for his ruthless business tactics.",
+            "motives": "Involved in corporate espionage and owed the victim a large sum of money.",
+            "public_info": "Arrogant and powerful."
+        },
+        {
+            "name": "Mia Chen",
+            "background": "Young social media influencer always looking for the next big story.",
+            "motives": "Blackmailing guests for content and clout.",
+            "public_info": "Outgoing and always filming."
+        },
+        {
+            "name": "Thomas Blackwell",
+            "background": "Retired detective on the cruise for relaxation.",
+            "motives": "Investigating a cold case connected to the victim.",
+            "public_info": "Observant and quiet."
+        }
     ],
-    # Add the other two stories similarly if needed
+    # Add the other two stories as needed
 }
 
 roles = core_characters.get(story_id, [])
@@ -70,16 +130,13 @@ if selected_role:
     st.subheader("Public Information")
     st.write(selected_role.get("public_info", "No public information available."))
     
-    st.subheader("Evidence Tie")
-    st.write(selected_role.get("evidence_tie", "No direct evidence tie defined."))
-
     st.divider()
     
-    # Introduction Statement
+    # Introduction Statement (only for Introduction phase)
     current_act = st.session_state.get("current_act", 0)
     if current_act == 0:
         st.subheader("Introduction Statement (Say this to the group)")
-        st.info("Good evening everyone. My name is " + selected_role['name'] + ". I look forward to getting to know all of you tonight.")
+        st.info(f"Good evening everyone. My name is {selected_role['name']}. I look forward to getting to know all of you tonight.")
 
     st.subheader("Questions to Ask")
     act_names = ["Introduction", "Act 1", "Act 2", "Act 3", "Accusations", "Reveal"]
