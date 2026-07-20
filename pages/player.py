@@ -35,7 +35,7 @@ evidence_per_act = {
     3: ["blood-stained cutlass", "hidden note with initials", "missing treasure map piece"]
 }
 
-# Full Character Data with Unique Tonality
+# Full Character Data with Unique Guilty Tone
 characters = {
     "Captain Elias Blackthorn": {
         "background": "Veteran stage actor who has played the pirate captain for years. He takes his role extremely seriously.",
@@ -48,7 +48,7 @@ characters = {
             3: ["Miss Sharpe, how did the blood-stained cutlass end up in your area?"]
         },
         "innocent_response": "I had nothing to do with this. As the captain of this show, I was busy preparing for the grand finale the entire time. I would never harm a member of my own cast.",
-        "guilty_response": "I had nothing to do with this... As the captain of this show, I was busy preparing for the grand finale the entire time. I would never harm a member of my own cast."
+        "guilty_response": "I had nothing to do with this... I mean, as the captain of this show, I was busy preparing for the grand finale. Why would anyone think I had anything to do with it?"
     },
     "Lady Victoria Voss": {
         "background": "Experienced actress playing the wealthy widow. Elegant but competitive.",
@@ -61,7 +61,7 @@ characters = {
             3: ["Mr. Hawthorne, how did your note end up with the cutlass?"]
         },
         "innocent_response": "I had nothing to do with this. I was in my dressing room the whole time, preparing for my next scene. I would never stoop to something so vulgar.",
-        "guilty_response": "I had nothing to do with this... I was in my dressing room the whole time, preparing for my next scene. I would never stoop to something so vulgar."
+        "guilty_response": "I had nothing to do with this... I was in my dressing room the whole time. Why on earth would anyone accuse me of such a thing?"
     },
     "Dr. Julian Crowe": {
         "background": "Character actor playing the ship's doctor. Quiet and intellectual.",
@@ -74,7 +74,7 @@ characters = {
             3: ["Miss Sharpe, how did the blood-stained cutlass end up in your area?"]
         },
         "innocent_response": "I had nothing to do with this. As the ship's physician, I was attending to a guest who felt unwell the entire time. I take my duties very seriously.",
-        "guilty_response": "I had nothing to do with this... As the ship's physician, I was attending to a guest who felt unwell the entire time. I take my duties very seriously."
+        "guilty_response": "I had nothing to do with this... I was attending to a guest the entire time. I don't know why anyone would point fingers at me."
     },
     "Isabella 'Izzy' Torres": {
         "background": "Young, fiery dancer and actress.",
@@ -87,7 +87,7 @@ characters = {
             3: ["Miss Sharpe, how did the blood-stained cutlass end up in your area?"]
         },
         "innocent_response": "I had nothing to do with this. I was practicing my dance routine backstage the whole time. I would never hurt anyone.",
-        "guilty_response": "I had nothing to do with this... I was practicing my dance routine backstage the whole time. I would never hurt anyone."
+        "guilty_response": "I had nothing to do with this... I was practicing my dance routine backstage. Why would anyone think I was involved?"
     },
     "Mr. Reginald Hawthorne": {
         "background": "Actor playing the wealthy merchant. Loud and arrogant.",
@@ -100,7 +100,7 @@ characters = {
             3: ["Miss Sharpe, how did your note end up with the cutlass?"]
         },
         "innocent_response": "I had nothing to do with this. I was in the dining hall entertaining guests the entire time. A man of my stature would never lower himself to such things.",
-        "guilty_response": "I had nothing to do with this... I was in the dining hall entertaining guests the entire time. A man of my stature would never lower himself to such things."
+        "guilty_response": "I had nothing to do with this... I was in the dining hall the entire time. How dare anyone suggest I had anything to do with it!"
     },
     "Miss Penelope Sharpe": {
         "background": "Quiet actress playing the captain's assistant.",
@@ -113,14 +113,9 @@ characters = {
             3: ["Mr. Hawthorne, how did your note end up with the cutlass?"]
         },
         "innocent_response": "I had nothing to do with this. I was organizing props backstage the entire time. I prefer to stay out of trouble.",
-        "guilty_response": "I had nothing to do with this... I was organizing props backstage the entire time. I prefer to stay out of trouble."
+        "guilty_response": "I had nothing to do with this... I was organizing props backstage the entire time. Please, I don't want any trouble."
     }
 }
-
-# Add extra characters (as before)
-if num_guests > len(characters):
-    # Generate extra characters with unique responses
-    pass
 
 role_names = list(characters.keys())
 selected_role_name = st.selectbox("Select Your Character", options=role_names, key="selected_role")
