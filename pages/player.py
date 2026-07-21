@@ -35,13 +35,18 @@ evidence_per_act = {
     3: ["blood-stained cutlass", "hidden note with initials", "missing treasure map piece"]
 }
 
-# Full Character Data
+# Full Character Data with Unique Questions
 characters = {
     "Captain Elias Blackthorn": {
         "background": "Veteran stage actor who has played the pirate captain for years.",
         "motives": "He is obsessed with finding the real Crimson Cutlass treasure map.",
         "public_info": "Charismatic lead actor and host of the show.",
         "introduction": "Ladies and gentlemen, I am Captain Elias Blackthorn. I never imagined our performance would turn into a real tragedy tonight.",
+        "questions": {
+            1: "Lady Victoria, what were you doing near the lipstick-stained glass?",
+            2: "Izzy, why was your scarf near the gunpowder residue?",
+            3: "Dr. Crowe, how did the blood-stained cutlass end up in the medical area?"
+        },
         "innocent_response": "I had nothing to do with this. As the captain of this show, I was busy preparing for the grand finale the entire time.",
         "guilty_response": "I had nothing to do with this... I mean, as the captain, I was busy preparing for the grand finale. Why would anyone think I had anything to do with it?"
     },
@@ -50,6 +55,11 @@ characters = {
         "motives": "She is looking for the lost treasure map prop.",
         "public_info": "Elegant and flirtatious actress always dressed in stunning gowns.",
         "introduction": "Good evening. I am Lady Victoria Voss. This night has taken a dreadful turn.",
+        "questions": {
+            1: "Captain Blackthorn, why was your watch found near the victim?",
+            2: "Miss Sharpe, did you see who left the handkerchief?",
+            3: "Mr. Hawthorne, how did your note end up with the cutlass?"
+        },
         "innocent_response": "I had nothing to do with this. I was in my dressing room the whole time, preparing for my next scene.",
         "guilty_response": "I had nothing to do with this... I was in my dressing room. Why on earth would anyone accuse me?"
     },
@@ -58,6 +68,11 @@ characters = {
         "motives": "Blackmailing several cast members.",
         "public_info": "The ship's physician.",
         "introduction": "Good evening. I am Dr. Julian Crowe. What has happened here tonight is deeply disturbing.",
+        "questions": {
+            1: "Captain Blackthorn, why was your watch found near the victim?",
+            2: "Izzy, why was your scarf near the gunpowder?",
+            3: "Miss Sharpe, how did the blood-stained cutlass end up in your area?"
+        },
         "innocent_response": "I had nothing to do with this. As the ship's physician, I was attending to a guest the entire time.",
         "guilty_response": "I had nothing to do with this... I was attending to a guest. I don't know why anyone would point fingers at me."
     },
@@ -66,6 +81,11 @@ characters = {
         "motives": "She knows a dangerous secret about the murder.",
         "public_info": "Talented dancer.",
         "introduction": "Hi everyone... I'm Izzy Torres. I can't believe this is happening.",
+        "questions": {
+            1: "Captain Blackthorn, why was your watch found near the victim?",
+            2: "Dr. Crowe, why was your medical bag near the gunpowder?",
+            3: "Mr. Hawthorne, how did your note end up with the cutlass?"
+        },
         "innocent_response": "I had nothing to do with this. I was practicing my dance routine backstage the whole time.",
         "guilty_response": "I had nothing to do with this... I was practicing my dance routine. Why would anyone think I was involved?"
     },
@@ -74,6 +94,11 @@ characters = {
         "motives": "He owes large debts.",
         "public_info": "Boastful merchant.",
         "introduction": "This is outrageous! I am Reginald Hawthorne. I demand to know what is going on here.",
+        "questions": {
+            1: "Captain Blackthorn, why was your watch found near the victim?",
+            2: "Izzy, why was your scarf near the gunpowder?",
+            3: "Dr. Crowe, how did the blood-stained cutlass end up in the medical area?"
+        },
         "innocent_response": "I had nothing to do with this. I was in the dining hall entertaining guests the entire time.",
         "guilty_response": "I had nothing to do with this... I was in the dining hall. How dare anyone suggest I had anything to do with it!"
     },
@@ -82,6 +107,11 @@ characters = {
         "motives": "Secretly in love with one of the guests.",
         "public_info": "Bookish assistant.",
         "introduction": "Hello... I'm Penelope Sharpe. I don't know what to say about what happened.",
+        "questions": {
+            1: "Captain Blackthorn, why was your watch found near the victim?",
+            2: "Lady Victoria, did you see who broke the pocket watch?",
+            3: "Izzy, why was your scarf near the gunpowder?"
+        },
         "innocent_response": "I had nothing to do with this. I was organizing props backstage the entire time.",
         "guilty_response": "I had nothing to do with this... I was organizing props backstage. Please, I don't want any trouble."
     }
@@ -116,22 +146,15 @@ if selected_role:
         st.subheader("Questions to Ask")
         evidence_list = evidence_per_act.get(current_act, ["unknown evidence"])
         evidence = random.choice(evidence_list)
-        
-        # Randomly select 1-2 other characters to accuse
-        other_characters = [name for name in role_names if name != selected_role_name]
-        random.shuffle(other_characters)
-        targets = other_characters[:2]  # 1-2 unique targets
-        
-        st.write(f"**Act {current_act} - Questions about the revealed evidence ({evidence})**")
-        for target in targets:
-            st.write(f"- {target}, how do you explain your connection to the {evidence} that was found?")
-        
-        st.divider()
-        
-        st.subheader("What to Say If Questioned")
-        st.write("**If Innocent:**")
-        st.info(selected_role.get("innocent_response", "I had nothing to do with this."))
-        st.write("**If Guilty:**")
-        st.info(selected_role.get("guilty_response", "I had nothing to do with this..."))
+        st.write(f"**Act {current_act} - Question about the revealed evidence ({evidence})**")
+        st.write(f"- {selected_role.get('questions', {}).get(current_act, 'How do you explain this evidence?')}")
+
+    st.divider()
+    
+    st.subheader("What to Say If Questioned")
+    st.write("**If Innocent:**")
+    st.info(selected_role.get("innocent_response", "I had nothing to do with this."))
+    st.write("**If Guilty:**")
+    st.info(selected_role.get("guilty_response", "I had nothing to do with this..."))
 
 st.caption("Do not show this page to other players!")
