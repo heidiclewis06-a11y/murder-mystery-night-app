@@ -35,7 +35,7 @@ evidence_per_act = {
     3: ["blood-stained cutlass", "hidden note with initials", "missing treasure map piece"]
 }
 
-# Full Character Data with Balanced Accusations
+# Full Character Data with Balanced, Unique Accusations
 characters = {
     "Captain Elias Blackthorn": {
         "background": "Veteran stage actor who has played the pirate captain for years.",
@@ -43,9 +43,8 @@ characters = {
         "public_info": "Charismatic lead actor and host of the show.",
         "introduction": "Ladies and gentlemen, I am Captain Elias Blackthorn. I never imagined our performance would turn into a real tragedy tonight.",
         "questions": {
-            1: ["Lady Victoria, what were you doing near the lipstick-stained glass?", "Dr. Crowe, did you see who broke the pocket watch?", "Izzy, did you see anything suspicious?"],
-            2: ["Mr. Hawthorne, did you touch the empty whiskey bottle?", "Miss Sharpe, why was your notebook near the gunpowder?", "Izzy, why was your scarf near the gunpowder residue?"],
-            3: ["Dr. Crowe, how did the blood-stained cutlass end up in the medical area?", "Miss Sharpe, how did the hidden note end up in your area?", "Mr. Hawthorne, how did your note end up with the cutlass?"]
+            1: ["Lady Victoria, what were you doing near the lipstick-stained glass?", "Dr. Crowe, did you see who broke the pocket watch?"],
+            2: ["Izzy, why was your scarf near the gunpowder residue?", "Mr. Hawthorne, did you touch the empty whiskey bottle?"]
         },
         "innocent_response": "I had nothing to do with this. As the captain of this show, I was busy preparing for the grand finale the entire time.",
         "guilty_response": "I had nothing to do with this... I mean, as the captain, I was busy preparing for the grand finale. Why would anyone think I had anything to do with it?"
@@ -56,9 +55,8 @@ characters = {
         "public_info": "Elegant and flirtatious actress always dressed in stunning gowns.",
         "introduction": "Good evening. I am Lady Victoria Voss. This night has taken a dreadful turn.",
         "questions": {
-            1: ["Captain Blackthorn, why was your watch found near the victim?", "Dr. Crowe, did you see anyone with the torn map piece?", "Izzy, did you see anything suspicious?"],
-            2: ["Mr. Hawthorne, did you touch the empty whiskey bottle?", "Miss Sharpe, why was your notebook near the gunpowder?", "Captain Blackthorn, did you see who left the handkerchief?"],
-            3: ["Dr. Crowe, how did the blood-stained cutlass end up in the medical area?", "Izzy, did you see anyone near the hidden note?", "Mr. Hawthorne, how did your note end up with the cutlass?"]
+            1: ["Captain Blackthorn, why was your watch found near the victim?", "Izzy, did you see anything suspicious?"],
+            2: ["Dr. Crowe, why was your medical bag near the gunpowder?", "Miss Sharpe, why was your notebook near the gunpowder?"]
         },
         "innocent_response": "I had nothing to do with this. I was in my dressing room the whole time, preparing for my next scene.",
         "guilty_response": "I had nothing to do with this... I was in my dressing room. Why on earth would anyone accuse me?"
@@ -69,9 +67,8 @@ characters = {
         "public_info": "The ship's physician.",
         "introduction": "Good evening. I am Dr. Julian Crowe. What has happened here tonight is deeply disturbing.",
         "questions": {
-            1: ["Captain Blackthorn, why was your watch found near the victim?", "Lady Victoria, did you see who broke the pocket watch?", "Izzy, did you see anything suspicious?"],
-            2: ["Izzy, why was your scarf near the gunpowder?", "Mr. Hawthorne, did you touch the empty whiskey bottle?", "Miss Sharpe, why was your notebook near the gunpowder?"],
-            3: ["Miss Sharpe, how did the blood-stained cutlass end up in your area?", "Mr. Hawthorne, how did your note end up with the cutlass?", "Lady Victoria, did you see anyone near the hidden note?"]
+            1: ["Captain Blackthorn, why was your watch found near the victim?", "Lady Victoria, did you see who broke the pocket watch?"],
+            2: ["Izzy, why was your scarf near the gunpowder?", "Mr. Hawthorne, did you touch the empty whiskey bottle?"]
         },
         "innocent_response": "I had nothing to do with this. As the ship's physician, I was attending to a guest the entire time.",
         "guilty_response": "I had nothing to do with this... I was attending to a guest. I don't know why anyone would point fingers at me."
@@ -82,9 +79,8 @@ characters = {
         "public_info": "Talented dancer.",
         "introduction": "Hi everyone... I'm Izzy Torres. I can't believe this is happening.",
         "questions": {
-            1: ["Captain Blackthorn, why was your watch found near the victim?", "Lady Victoria, did you see who broke the pocket watch?", "Dr. Crowe, did you see anything suspicious?"],
-            2: ["Dr. Crowe, why was your medical bag near the gunpowder?", "Mr. Hawthorne, did you touch the empty whiskey bottle?", "Miss Sharpe, why was your notebook near the gunpowder?"],
-            3: ["Dr. Crowe, how did the blood-stained cutlass end up in the medical area?", "Mr. Hawthorne, how did your note end up with the cutlass?", "Lady Victoria, did you see anyone near the hidden note?"]
+            1: ["Captain Blackthorn, why was your watch found near the victim?", "Dr. Crowe, did you see anything suspicious?"],
+            2: ["Mr. Hawthorne, did you touch the empty whiskey bottle?", "Miss Sharpe, why was your notebook near the gunpowder?"]
         },
         "innocent_response": "I had nothing to do with this. I was practicing my dance routine backstage the whole time.",
         "guilty_response": "I had nothing to do with this... I was practicing my dance routine. Why would anyone think I was involved?"
@@ -95,9 +91,8 @@ characters = {
         "public_info": "Boastful merchant.",
         "introduction": "This is outrageous! I am Reginald Hawthorne. I demand to know what is going on here.",
         "questions": {
-            1: ["Captain Blackthorn, why was your watch found near the victim?", "Lady Victoria, did you see who broke the pocket watch?", "Izzy, did you see anything suspicious?"],
-            2: ["Izzy, why was your scarf near the gunpowder?", "Dr. Crowe, did you see anyone with the empty whiskey bottle?", "Miss Sharpe, why was your notebook near the gunpowder?"],
-            3: ["Dr. Crowe, how did the blood-stained cutlass end up in the medical area?", "Izzy, did you see anyone near the hidden note?", "Lady Victoria, did you see anyone near the cutlass?"]
+            1: ["Captain Blackthorn, why was your watch found near the victim?", "Lady Victoria, did you see who broke the pocket watch?"],
+            2: ["Izzy, why was your scarf near the gunpowder?", "Dr. Crowe, did you see anyone with the empty whiskey bottle?"]
         },
         "innocent_response": "I had nothing to do with this. I was in the dining hall entertaining guests the entire time.",
         "guilty_response": "I had nothing to do with this... I was in the dining hall. How dare anyone suggest I had anything to do with it!"
@@ -108,9 +103,8 @@ characters = {
         "public_info": "Bookish assistant.",
         "introduction": "Hello... I'm Penelope Sharpe. I don't know what to say about what happened.",
         "questions": {
-            1: ["Captain Blackthorn, why was your watch found near the victim?", "Lady Victoria, did you see who broke the pocket watch?", "Izzy, did you see anything suspicious?"],
-            2: ["Izzy, why was your scarf near the gunpowder?", "Dr. Crowe, did you see anyone with the empty whiskey bottle?", "Mr. Hawthorne, did you touch the empty whiskey bottle?"],
-            3: ["Dr. Crowe, how did the blood-stained cutlass end up in the medical area?", "Mr. Hawthorne, how did your note end up with the cutlass?", "Lady Victoria, did you see anyone near the hidden note?"]
+            1: ["Captain Blackthorn, why was your watch found near the victim?", "Lady Victoria, did you see who broke the pocket watch?"],
+            2: ["Izzy, why was your scarf near the gunpowder?", "Mr. Hawthorne, did you touch the empty whiskey bottle?"]
         },
         "innocent_response": "I had nothing to do with this. I was organizing props backstage the entire time.",
         "guilty_response": "I had nothing to do with this... I was organizing props backstage. Please, I don't want any trouble."
