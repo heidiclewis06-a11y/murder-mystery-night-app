@@ -35,7 +35,7 @@ evidence_per_act = {
     3: ["blood-stained cutlass", "hidden note with initials", "missing treasure map piece"]
 }
 
-# Full Character Data with Unique Questions
+# Full Character Data with Balanced Questions
 characters = {
     "Captain Elias Blackthorn": {
         "background": "Veteran stage actor who has played the pirate captain for years.",
